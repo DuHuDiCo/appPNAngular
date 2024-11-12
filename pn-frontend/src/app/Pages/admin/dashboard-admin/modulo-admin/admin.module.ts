@@ -4,6 +4,7 @@ import { ModuloAdminComponent } from './modulo-admin.component';
 import { ProveedoresComponent } from '../../Components/proveedores/proveedores.component';
 import { VendedoresComponent } from '../../Components/vendedores/vendedores.component';
 import { UsuariosComponent } from '../../Components/usuarios/usuarios.component';
+import { NavbarAdminComponent } from '../../Components/navbar-admin/navbar-admin.component';
 
 
 
@@ -12,7 +13,8 @@ import { UsuariosComponent } from '../../Components/usuarios/usuarios.component'
     ModuloAdminComponent,
     ProveedoresComponent,
     VendedoresComponent,
-    UsuariosComponent
+    UsuariosComponent,
+    NavbarAdminComponent
   ],
   imports: [
     CommonModule

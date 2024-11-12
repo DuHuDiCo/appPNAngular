@@ -1,24 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "flowbite";
 
 @layer components {
-    .input {
-        @apply w-full h-10 rounded-lg text-center focus:outline-none;
-        transition: all 0.3s ease-in-out;
-    }
+  .input {
+    @apply w-full h-10 rounded-lg text-center focus:outline-none;
+    transition: all 0.3s ease-in-out;
+  }
 
-    .input:focus {
-        @apply ring-2 ring-blue-300;
-        outline: none;
-    }
+  .input:focus {
+    @apply ring-2 ring-blue-300;
+    outline: none;
+  }
 
-    .button {
-        @apply w-28 mx-auto rounded-md h-12;
-        transition: all 0.3s ease-in-out;
-    }
+  .button {
+    @apply w-28 mx-auto rounded-md h-12;
+    transition: all 0.3s ease-in-out;
+  }
 
-    .button:hover {
-        @apply bg-orange-300;
-    }
+  .button:hover {
+    @apply bg-orange-300;
+  }
 }

@@ -8,12 +8,14 @@ import { VendedoresComponent } from './Pages/admin/Components/vendedores/vendedo
 import { UsuariosComponent } from './Pages/admin/Components/usuarios/usuarios.component';
 import { ProveedoresComponent } from './Pages/admin/Components/proveedores/proveedores.component';
 import { ModuloAdminComponent } from './Pages/admin/dashboard-admin/modulo-admin/modulo-admin.component';
+import { NavbarAdminComponent } from './Pages/admin/Components/navbar-admin/navbar-admin.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    ModuloAdminComponent
+    ModuloAdminComponent,
+    NavbarAdminComponent
   ],
   imports: [
     BrowserModule,
