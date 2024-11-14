@@ -13,13 +13,4 @@
     @apply ring-2 ring-blue-300;
     outline: none;
   }
-
-  .button {
-    @apply w-28 mx-auto rounded-md h-12;
-    transition: all 0.3s ease-in-out;
-  }
-
-  .button:hover {
-    @apply bg-orange-300;
-  }
 }
