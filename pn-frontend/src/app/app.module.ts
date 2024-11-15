@@ -4,22 +4,17 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './Components/login/login.component';
-import { VendedoresComponent } from './Pages/admin/Components/vendedores/vendedores.component';
-import { UsuariosComponent } from './Pages/admin/Components/usuarios/usuarios.component';
-import { ProveedoresComponent } from './Pages/admin/Components/proveedores/proveedores.component';
-import { ModuloAdminComponent } from './Pages/admin/dashboard-admin/modulo-admin/modulo-admin.component';
-import { NavbarAdminComponent } from './Pages/admin/Components/navbar-admin/navbar-admin.component';
+import { AdminModule } from './Pages/admin/dashboard-admin/modulo-admin/admin.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    ModuloAdminComponent,
-    NavbarAdminComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    AdminModule
   ],
   providers: [],
   bootstrap: [AppComponent]

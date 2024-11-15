@@ -5,6 +5,7 @@ import { ProveedoresComponent } from '../../Components/proveedores/proveedores.c
 import { VendedoresComponent } from '../../Components/vendedores/vendedores.component';
 import { UsuariosComponent } from '../../Components/usuarios/usuarios.component';
 import { NavbarAdminComponent } from '../../Components/navbar-admin/navbar-admin.component';
+import { AppRoutingModule } from 'src/app/app-routing.module';
 
 
 
@@ -17,7 +18,8 @@ import { NavbarAdminComponent } from '../../Components/navbar-admin/navbar-admin
     NavbarAdminComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    AppRoutingModule
   ],
   exports: [
     ModuloAdminComponent
