@@ -6,6 +6,7 @@ import { VendedoresComponent } from '../../Components/vendedores/vendedores.comp
 import { UsuariosComponent } from '../../Components/usuarios/usuarios.component';
 import { NavbarAdminComponent } from '../../Components/navbar-admin/navbar-admin.component';
 import { AppRoutingModule } from 'src/app/app-routing.module';
+import { HttpClientModule } from '@angular/common/http';
 
 
 
@@ -19,7 +20,8 @@ import { AppRoutingModule } from 'src/app/app-routing.module';
   ],
   imports: [
     CommonModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
   exports: [
     ModuloAdminComponent

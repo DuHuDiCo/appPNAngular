@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import baseUrl from 'src/Environments/helper';
-import { Usuario } from 'src/Types/User.type';
+import { Usuario } from 'src/Interface/User.type';
 
 @Injectable({
   providedIn: 'root'
