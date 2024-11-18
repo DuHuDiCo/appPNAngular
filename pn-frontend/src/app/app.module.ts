@@ -6,6 +6,8 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './Components/login/login.component';
 import { AdminModule } from './Pages/admin/dashboard-admin/modulo-admin/admin.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { authInterceptorProviders } from 'src/Interceptor/auth.interceptor';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -16,9 +18,10 @@ import { ReactiveFormsModule } from '@angular/forms';
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    AdminModule
+    AdminModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [authInterceptorProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
