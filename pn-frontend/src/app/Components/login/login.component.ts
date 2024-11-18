@@ -36,6 +36,7 @@ export class LoginComponent {
             confirmButtonColor: "#3085d6",
           })
           this.loginService.setToken(data.token)
+          this.loginService.setFecha(data.lastSesion)
           console.log(data);
           setTimeout(() => {
             this.router.navigate(['administracion']);
