@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { catchError, of, tap } from 'rxjs';
 import { LoginService } from 'src/app/Services/Auth/login.service';
 import { Login } from 'src/Interface/User.type';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -25,18 +26,31 @@ export class LoginComponent {
   login() {
     if(this.formLogin.valid){
       var credenciales: Login = this.formLogin.value
-
       this.loginService.inicioSesion(credenciales).pipe(
         tap((data: any) => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Bienvenido',
+            text: 'Usuario Autenticado',
+            timer: 3000,
+            confirmButtonColor: "#3085d6",
+          })
           console.log(data);
-          this.router.navigate(['administracion']);
-        }), catchError((error: Error) => {
+          setTimeout(() => {
+            this.router.navigate(['administracion']);
+          }, 1000); 
+       }), catchError((error: Error) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error al ingresar',
+            timer: 3000,
+            confirmButtonColor: "#3085d6",
+          })
           console.log(error);
           return of([])
         })
-      )
-    } else {
-
+      ).subscribe()
     }
   }
 
