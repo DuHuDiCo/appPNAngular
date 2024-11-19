@@ -27,11 +27,11 @@ export class LoginService {
 
   public logout():void{
     localStorage.removeItem("Token")
+    localStorage.removeItem("Fecha") 
     // localStorage.removeItem("Username")
     // localStorage.removeItem("Roles")
     // localStorage.removeItem("Sede")
     // localStorage.removeItem("Is_updateable")
-    // localStorage.removeItem("Fecha") 
   }
 
   public setFecha(fecha:string){

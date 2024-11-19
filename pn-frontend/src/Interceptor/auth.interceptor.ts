@@ -21,15 +21,11 @@ export class AuthInterceptor implements HttpInterceptor {
       var fechaActual = new Date()
       var diferencia = fechaActual.getTime() - fecha.getTime()
       var horasPasadas = diferencia / 3600000
-      console.log(horasPasadas);
-      
       if (horasPasadas >= 10) {
         this.loginService.logout()
         window.location.reload()
       } else {
         const token = this.loginService.getToken();
-        console.log(token);
-        
         if (token != null) {
           authRequest = authRequest.clone({
             setHeaders: { Authorization: `Bearer ${token}` }
@@ -37,9 +33,6 @@ export class AuthInterceptor implements HttpInterceptor {
         }
       }
     }
-
-    console.log(authRequest);
-    
     return next.handle(authRequest);
   }
 }

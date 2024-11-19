@@ -35,7 +35,16 @@ export interface Usuario {
 }
 
 export interface Login {
-    "username": string,
-    "password": string
+    username: string,
+    password: string
+  }
+
+export interface CreateUser {
+    idUser: number,
+    name: string,
+    lastname: string,
+    email: string,
+    password: string,
+    roles: any[]
   }
 
