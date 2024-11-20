@@ -8,17 +8,18 @@ import { AdminModule } from './Pages/admin/dashboard-admin/modulo-admin/admin.mo
 import { ReactiveFormsModule } from '@angular/forms';
 import { authInterceptorProviders } from 'src/Interceptor/auth.interceptor';
 import { HttpClientModule } from '@angular/common/http';
+import { ClientesComponent } from './Pages/admin/Components/clientes/clientes.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
+    ClientesComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    AdminModule,
     HttpClientModule
   ],
   providers: [authInterceptorProviders],

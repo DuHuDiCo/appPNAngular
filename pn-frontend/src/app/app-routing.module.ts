@@ -5,6 +5,7 @@ import { ModuloAdminComponent } from './Pages/admin/dashboard-admin/modulo-admin
 import { UsuariosComponent } from './Pages/admin/Components/usuarios/usuarios.component';
 import { ProveedoresComponent } from './Pages/admin/Components/proveedores/proveedores.component';
 import { VendedoresComponent } from './Pages/admin/Components/vendedores/vendedores.component';
+import { ClientesComponent } from './Pages/admin/Components/clientes/clientes.component';
 
 const routes: Routes = [
   // GENERALES
@@ -22,7 +23,8 @@ const routes: Routes = [
     children: [
       { path: 'usuarios', component: UsuariosComponent },
       { path: 'proveedores', component: ProveedoresComponent },
-      { path: 'vendedores', component: VendedoresComponent }
+      { path: 'vendedores', component: VendedoresComponent }, 
+      { path: 'clientes', component: ClientesComponent }
     ]
   },
 ];
