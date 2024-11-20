@@ -30,6 +30,7 @@ export class UsuariosComponent implements AfterViewInit {
       "name": ['', [Validators.required]],
       "lastname": ['', [Validators.required]],
       "email": ['', [Validators.required, Validators.email]],
+      "enabled": ['', [Validators.required]],
       "password": [''],
     });
     
@@ -152,22 +153,57 @@ export class UsuariosComponent implements AfterViewInit {
   }
 
   getBuscarUsuario(dato: string){
-    this.usuarioService.buscarUsuario(dato).pipe(
-      tap((data: any) => {
-        console.log(data);
-      }),
-      catchError((error: any) => {  
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Error al buscar el usuario',
-          timer: 3000,
-          confirmButtonColor: "#3085d6",
-        })        
-        console.log(error);
-        return of([])
+    if(dato == ''){
+      this.getUsuarios();
+      return;
+    }
+
+    if(this.formSearch.valid){
+      this.usuarioService.buscarUsuario(dato).pipe(
+        tap((data: any) => {
+          this.usuariosArray = data
+          Swal.fire({
+            icon: 'success',
+            title: 'Usuarios encontrados',
+            text: 'Se encontraron estos usuarios',
+            timer: 3000,
+            confirmButtonColor: "#3085d6",
+          })
+          console.log(data);
+        }),
+        catchError((error: any) => {
+          if (error.status === 400) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Usuario no encontrado',
+              timer: 3000,
+              confirmButtonColor: "#3085d6",
+            })
+            console.log(error);
+            return of([])
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Error al buscar el usuario',
+              timer: 3000,
+              confirmButtonColor: "#3085d6",
+            })        
+            console.log(error);
+            return of([])
+          }
+        })
+      ).subscribe()
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Llene todos los campos',
+        timer: 3000,
+        confirmButtonColor: "#3085d6",
       })
-    ).subscribe() 
+    }
   }
 
   clearUser(){

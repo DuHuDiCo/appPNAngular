@@ -1,33 +1,44 @@
 <div class="mt-5">
     
-    <form class="flex items-center max-w-3xl mx-auto space-x-4">
-        <button (click)="clearUser()" type="button" data-modal-target="editUserModal" data-modal-toggle="editUserModal" class="flex items-center p-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+    <form class="flex items-center max-w-5xl mx-auto space-x-6">
+        <!-- Botón "Agregar" -->
+        <button (click)="clearUser()" 
+            type="button" 
+            data-modal-target="editUserModal" 
+            data-modal-toggle="editUserModal" 
+            class="flex items-center px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
             </svg>
-            <span>Agregar</span>
-        </button>        
-        
-        <form [formGroup]="formSearch" (ngSubmit)="getBuscarUsuario(formSearch.value.dato)">
+            <span class="ml-2">Agregar</span>
+        </button>
+    
+        <!-- Formulario de búsqueda -->
+        <form [formGroup]="formSearch" (ngSubmit)="getBuscarUsuario(formSearch.value.dato)" class="flex-grow">
             <label for="simple-search" class="sr-only">Usuario</label>
-        <div class="flex items-center space-x-2">
-            <div class="relative w-full">
-                <input type="text" formControlName="dato" id="search-name"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                    placeholder="Buscar por nombre" required />
+            <div class="flex items-center space-x-4">
+                <!-- Input de búsqueda -->
+                <div class="relative flex-grow">
+                    <input type="text" 
+                        formControlName="dato" 
+                        id="search-name" 
+                        class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                        placeholder="Buscar por nombre" 
+                        required />
+                </div>
+                <!-- Botón de búsqueda -->
+                <button type="submit" 
+                    class="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg border border-primary hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                            d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                    </svg>
+                    <span class="sr-only">Buscar</span>
+                </button>
             </div>
-            <button type="button" 
-                class="p-2.5 ms-2 text-sm font-medium text-white bg-primary rounded-lg border border-primary hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                        d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                </svg>
-                <span class="sr-only">Buscar</span>
-            </button>
-        </div>
         </form>
-        
     </form>
+    
     
 
     <div class="relative overflow-x-auto mx-auto my-8 max-w-4xl">
@@ -57,11 +68,12 @@
                         {{ u.email }}
                     </td>
                     <td class="px-6 py-4">
-                        <label class="inline-flex items-center me-5 cursor-pointer">
-                            <input type="checkbox" value="" class="sr-only peer" [checked]="u.enabled">
-                            <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-teal-300 dark:peer-focus:ring-teal-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-teal-600"></div>
-                            <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300"></span>
-                          </label>
+                        <div class="flex items-center" *ngIf="u.enabled == true">
+                            <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div> Activo
+                        </div>
+                        <div class="flex items-center" *ngIf="u.enabled == false">
+                            <div class="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div> Inactivo
+                        </div>
                           
                     </td>
                     <td class="px-6 py-4">
@@ -109,6 +121,14 @@
                                 <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
                                 <input type="email" formControlName="email" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required>
                             </div>
+                            <div class="col-span-6 sm:col-span-3">
+                            <label class="inline-flex items-center me-5 cursor-pointer mt-8">
+                                <input type="checkbox" value="" class="sr-only peer" formControlName="enabled">
+                                <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-teal-300 dark:peer-focus:ring-teal-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-teal-600"></div>
+                                <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">{{ formUser.get('enabled')?.value == true ? 'Activo' : 'Inactivo' }}</span>
+                              </label>
+                            </div>
+
                         </div>
                     </div>
                     <!-- Modal footer -->
