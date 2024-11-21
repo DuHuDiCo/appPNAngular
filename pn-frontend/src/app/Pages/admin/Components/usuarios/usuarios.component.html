@@ -17,12 +17,16 @@
         <form [formGroup]="formSearch" (ngSubmit)="getBuscarUsuario(formSearch.value.dato)" class="flex-grow">
             <label for="simple-search" class="sr-only">Usuario</label>
             <div class="flex items-center space-x-4">
-                <!-- Input de búsqueda -->
                 <div class="relative flex-grow">
+                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                        </svg>              
+                    </div>
                     <input type="text" 
                         formControlName="dato" 
                         id="search-name" 
-                        class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                        class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 pl-10 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                         placeholder="Buscar por nombre" 
                         required />
                 </div>
@@ -40,7 +44,6 @@
     </form>
     
     
-
     <div class="relative overflow-x-auto mx-auto my-8 max-w-4xl">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -99,57 +102,74 @@
         </table>
     </div>
 
-        <!-- Edit user modal -->
-        <div id="editUserModal" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 items-center justify-center hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-            <div class="relative w-full max-w-2xl max-h-full">
-                <!-- Modal content -->
-                <form class="relative bg-white rounded-lg shadow dark:bg-gray-700" [formGroup]="formUser" (ngSubmit)="editUser ? updateUser() : createUser()">
-                    <!-- Modal header -->
-                    <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                            {{ editUser ? 'Editar Usuario' : 'Crear Usuario' }}
-                        </h3>
-                       <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="editUserModal">
-                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+    <div id="editUserModal" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 items-center justify-center hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full bg-gray-800 bg-opacity-50">
+        <div class="relative w-full max-w-lg max-h-full">
+            <!-- Modal content -->
+            <form class="relative bg-white rounded-lg shadow-lg dark:bg-gray-800" [formGroup]="formUser" (ngSubmit)="editUser ? updateUser() : createUser()">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between px-6 py-4 bg-primary rounded-t">
+                    <h3 class="text-lg font-bold text-white">
+                        {{ editUser ? 'Editar Usuario' : 'Crear Usuario' }}
+                    </h3>
+                    <button 
+                        type="button" 
+                        class="text-white bg-transparent hover:text-gray-200 focus:outline-none"
+                        data-modal-hide="editUserModal">
+                        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                         </svg>
-                        <span class="sr-only">Close modal</span>
+                        <span class="sr-only">Cerrar modal</span>
                     </button>
-                    </div>
-                    <!-- Modal body -->
-                    <div class="p-6 space-y-6">
-                        <div class="grid grid-cols-6 gap-6">
-                            <div class="col-span-6 sm:col-span-3">
-                                <label for="first-name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombres</label>
-                                <input type="text" formControlName="name" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required>
-                            </div>
-                            <div class="col-span-6 sm:col-span-3">
-                                <label for="last-name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Apellidos</label>
-                                <input type="text" formControlName="lastname" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required>
-                            </div>
-                            <div class="col-span-6 sm:col-span-3">
-                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-                                <input type="email" formControlName="email" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required>
-                            </div>
-                            <div class="col-span-6 sm:col-span-3">
-                            <label class="inline-flex items-center me-5 cursor-pointer mt-8">
+                </div>
+                <!-- Modal body -->
+                <div class="px-6 py-4 space-y-4">
+                    <div class="grid grid-cols-6 gap-6">
+                        <div class="col-span-6 sm:col-span-3">
+                            <label for="first-name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Nombres</label>
+                            <input 
+                                type="text" 
+                                formControlName="name" 
+                                class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500" 
+                                placeholder="Escribe tu nombre" 
+                                required>
+                        </div>
+                        <div class="col-span-6 sm:col-span-3">
+                            <label for="last-name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Apellidos</label>
+                            <input 
+                                type="text" 
+                                formControlName="lastname" 
+                                class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500" 
+                                placeholder="Escribe tu apellido" 
+                                required>
+                        </div>
+                        <div class="col-span-6 sm:col-span-3">
+                            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Email</label>
+                            <input 
+                                type="email" 
+                                formControlName="email" 
+                                class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500" 
+                                placeholder="ejemplo@correo.com" 
+                                required>
+                        </div>
+                        <div class="col-span-6 sm:col-span-3">
+                            <label class="inline-flex items-center cursor-pointer mt-8">
                                 <input type="checkbox" value="" class="sr-only peer" formControlName="enabled">
-                                <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-teal-300 dark:peer-focus:ring-teal-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-teal-600"></div>
-                                <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">{{ formUser.get('enabled')?.value == true ? 'Activo' : 'Inactivo' }}</span>
-                              </label>
-                            </div>
-
+                                <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-teal-300 dark:peer-focus:ring-teal-800 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-teal-600"></div>
+                                <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">{{ formUser.get('enabled')?.value == true ? 'Activo' : 'Inactivo' }}</span>
+                            </label>
                         </div>
                     </div>
-                    <!-- Modal footer -->
-                    <div class="flex justify-center items-center p-6 space-x-3 rtl:space-x-reverse border-t border-gray-200 rounded-b dark:border-gray-600">
-                        <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">{{ editUser ? 'Editar' : 'Crear' }}</button>
-                    </div>
-                </form>
-            </div>
+                </div>
+                <!-- Modal footer -->
+                <div class="flex justify-end px-6 py-4 space-x-3 bg-gray-100 rounded-b dark:bg-gray-700">
+                    <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-500 dark:hover:bg-blue-600">
+                        {{ editUser ? 'Editar' : 'Crear' }}
+                    </button>
+                </div>
+            </form>
         </div>
+    </div>
 
-        <button type="button" data-modal-target="editUserModal" data-modal-toggle="editUserModal" class="hidden" id="modalClick">
-        </button>   
+    <button type="button" data-modal-target="editUserModal" data-modal-toggle="editUserModal" class="hidden" id="modalClick"></button>   
 
 </div>

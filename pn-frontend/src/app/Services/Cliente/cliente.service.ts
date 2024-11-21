@@ -17,7 +17,7 @@ export class ClienteService {
     return this.http.post(`${baseUrl}/client/`, cliente)  
   }
 
-  editCliente(idCliente: number, cliente: any){
+  updateCliente(idCliente: number, cliente: any){
     return this.http.put(`${baseUrl}/client/${idCliente}`, cliente)
   }
 
