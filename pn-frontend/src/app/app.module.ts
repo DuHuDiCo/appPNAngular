@@ -9,12 +9,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { authInterceptorProviders } from 'src/Interceptor/auth.interceptor';
 import { HttpClientModule } from '@angular/common/http';
 import { ClientesComponent } from './Pages/admin/Components/clientes/clientes.component';
+import { ClasificacionComponent } from './Pages/admin/Components/clasificacion/clasificacion.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    ClientesComponent
+    ClientesComponent,
+    ClasificacionComponent
   ],
   imports: [
     BrowserModule,

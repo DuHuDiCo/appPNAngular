@@ -4,10 +4,10 @@ import { LoginComponent } from './Components/login/login.component';
 import { ModuloAdminComponent } from './Pages/admin/dashboard-admin/modulo-admin/modulo-admin.component';
 import { UsuariosComponent } from './Pages/admin/Components/usuarios/usuarios.component';
 import { ProveedoresComponent } from './Pages/admin/Components/proveedores/proveedores.component';
-import { VendedoresComponent } from './Pages/admin/Components/vendedores/vendedores.component';
 import { ClientesComponent } from './Pages/admin/Components/clientes/clientes.component';
 import { authGuard } from './Guards/Auth/auth.guard';
 import { loginGuard } from './Guards/Login/login.guard';
+import { ClasificacionComponent } from './Pages/admin/Components/clasificacion/clasificacion.component';
 
 const routes: Routes = [
   // GENERALES
@@ -26,8 +26,8 @@ const routes: Routes = [
     children: [
       { path: 'usuarios', component: UsuariosComponent, canActivate: [authGuard] },
       { path: 'proveedores', component: ProveedoresComponent, canActivate: [authGuard] },
-      { path: 'vendedores', component: VendedoresComponent, canActivate: [authGuard] },
       { path: 'clientes', component: ClientesComponent, canActivate: [authGuard] },
+      { path: 'clasificacion', component: ClasificacionComponent, canActivate: [authGuard] }, 
     ]
   },
 ];
