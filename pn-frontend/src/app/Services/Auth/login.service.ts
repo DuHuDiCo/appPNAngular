@@ -27,7 +27,9 @@ export class LoginService {
 
   public logout():void{
     localStorage.removeItem("Token")
-    localStorage.removeItem("Fecha") 
+    localStorage.removeItem("Fecha")
+    console.log('logout')
+     
     // localStorage.removeItem("Username")
     // localStorage.removeItem("Roles")
     // localStorage.removeItem("Sede")
@@ -45,6 +47,15 @@ export class LoginService {
       return fechaDate
     }
     return null
+  }
+
+  public isLogged():boolean{
+    var token:string | null = localStorage.getItem("Token");
+    if(token == undefined || token == null){
+      this.logout()
+      return false
+    }
+    return true;
   }
 
 }
