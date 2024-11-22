@@ -10,6 +10,8 @@ import { authInterceptorProviders } from 'src/Interceptor/auth.interceptor';
 import { HttpClientModule } from '@angular/common/http';
 import { ClientesComponent } from './Pages/admin/Components/clientes/clientes.component';
 import { ClasificacionComponent } from './Pages/admin/Components/clasificacion/clasificacion.component';
+import { NgxUiLoaderHttpModule, NgxUiLoaderModule } from 'ngx-ui-loader';
+import { ngxUiLoaderConfig } from 'src/Utils/loaderConfig';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,11 @@ import { ClasificacionComponent } from './Pages/admin/Components/clasificacion/c
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
+    NgxUiLoaderHttpModule.forRoot({
+      showForeground: true,
+    }),
   ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent]
