@@ -1,16 +1,31 @@
 import { NgxUiLoaderConfig } from "ngx-ui-loader";
 
 export const ngxUiLoaderConfig: NgxUiLoaderConfig = {
-    fgsColor: "#007bff", // Color del spinner
-    fgsType: "ball-spin", // Tipo de spinner (simple y profesional)
-    fgsSize: 50, // Tamaño del spinner
-    overlayColor: "rgba(0, 0, 0, 0.3)", // Color del overlay con opacidad
-    pbColor: "#007bff", // Color de la barra de progreso
-    pbThickness: 4, // Grosor de la barra de progreso
-    hasProgressBar: true, // Muestra barra de progreso
-    minTime: 300, // Tiempo mínimo en ms para mostrar el loader
-    maxTime: -1, // Sin tiempo máximo
-    text: "Cargando...", // Texto opcional debajo del spinner
-    textColor: "#FFFFFF", // Color del texto
-    textPosition: "center-center", // Posición del texto
-  };
+    "bgsColor": "#ffffff",
+    "bgsOpacity": 0.5,
+    "bgsPosition": "bottom-right",
+    "bgsSize": 60,
+    "bgsType": "ball-spin-clockwise",
+    "blur": 5,
+    "delay": 0,
+    "fastFadeOut": true,
+    "fgsColor": "#2A4B70",
+    "fgsPosition": "center-center",
+    "fgsSize": 60,
+    "gap": 24,
+    "logoPosition": "center-center",
+    "logoSize": 250,
+    "logoUrl": "../../assets/PN_logo-2.png",
+    "masterLoaderId": "master",
+    "overlayBorderRadius": "0",
+    "overlayColor": "#cacacac3",
+    "pbColor": "red",
+    "pbDirection": "ltr",
+    "pbThickness": 3,
+    "hasProgressBar": false,
+    "text": "Cargando...",
+    "textColor": "#2A4B70",
+    "textPosition": "center-center",
+    "maxTime": -1,
+    "minTime": 300
+}
