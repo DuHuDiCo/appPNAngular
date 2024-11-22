@@ -20,8 +20,11 @@ export class ClasificacionService {
   }
 
   // DELETE CLASIFICACION
-  deleteClasificacion(id: number){
-    return this.http.delete(`${baseUrl}/clasificacion/${id}`)
+  deleteClasificacion(idClasificacionProducto: number){
+    return this.http.delete(`${baseUrl}/clasificacion/${idClasificacionProducto}`)
   }
 
+  buscarClasificacion(dato: string){
+    return this.http.get(`${baseUrl}/clasificacion/byDato?dato=${dato}`);
+  }
 }
