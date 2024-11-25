@@ -55,6 +55,10 @@ export class ClientesComponent implements AfterViewInit {
   createCliente(){
     if(this.formCliente.valid){
       var cliente: any = this.formCliente.value
+      if(cliente.enabled == null){
+        cliente.enabled = false
+      }
+      console.log(this.formCliente.value);
       console.log(cliente);
       
       this.clienteService.createCliente(cliente).pipe(

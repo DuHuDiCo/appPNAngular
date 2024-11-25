@@ -45,6 +45,7 @@ export interface CreateUser {
     lastname: string,
     email: string,
     password: string,
+    enabled: boolean,
     roles: any[]
   }
 

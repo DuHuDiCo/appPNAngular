@@ -30,7 +30,7 @@ export class UsuariosComponent implements AfterViewInit {
       "name": ['', [Validators.required]],
       "lastname": ['', [Validators.required]],
       "email": ['', [Validators.required, Validators.email]],
-      "enabled": ['', [Validators.required]],
+      "enabled": [false],
       "password": [''],
     });
     
@@ -59,6 +59,9 @@ export class UsuariosComponent implements AfterViewInit {
   createUser(){
     if(this.formUser.valid){
       var user: CreateUser = this.formUser.value
+      if(user.enabled == null){
+        user.enabled = false
+      }
       user.roles = []
       console.log(user);
       
