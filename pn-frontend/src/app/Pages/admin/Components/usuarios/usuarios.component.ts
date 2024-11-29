@@ -8,142 +8,178 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-usuarios',
   templateUrl: './usuarios.component.html',
-  styleUrls: ['./usuarios.component.css']
+  styleUrls: ['./usuarios.component.css'],
 })
 export class UsuariosComponent implements AfterViewInit {
-
   // FORMS
-  formUser!: FormGroup
+  formUser!: FormGroup;
+  formVendedor!: FormGroup;
 
-  formSearch!: FormGroup
+  formSearch!: FormGroup;
 
   // ARRAY
-  usuariosArray: Usuario[] = []
+  usuariosArray: Usuario[] = [];
 
   // VARIABLES
-  editUser: boolean = false
+  editUser: boolean = false;
   searchCriteria = { name: '', lastname: '' };
-  
-  constructor(private usuarioService: UsuarioService, private formBuilder: FormBuilder, private renderer: Renderer2) {
+
+  constructor(
+    private usuarioService: UsuarioService,
+    private formBuilder: FormBuilder,
+    private renderer: Renderer2
+  ) {
     this.formUser = formBuilder.group({
-      "idUser": [''],
-      "name": ['', [Validators.required]],
-      "lastname": ['', [Validators.required]],
-      "email": ['', [Validators.required, Validators.email]],
-      "enabled": [false],
-      "password": [''],
+      idUser: [''],
+      name: ['', [Validators.required]],
+      lastname: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      enabled: [false],
+      isVendedor: [false],
+      password: [''],
     });
-    
+
+    this.formVendedor = formBuilder.group({
+      porcentaje: ['', [Validators.required, Validators.pattern('')]],
+    });
+
     this.formSearch = formBuilder.group({
-      "dato": ['', [Validators.required]],
+      dato: ['', [Validators.required]],
     });
   }
-
 
   ngAfterViewInit(): void {
-    this.getUsuarios()   
+    this.getUsuarios();
   }
 
-  getUsuarios(){
-    this.usuarioService.getUsers().pipe(
-      tap((data: any) => {
-        this.usuariosArray = data
-        console.log(data);
-      }), catchError((error: Error) => {
-        console.log(error);
-        return of([])
-      })
-    ).subscribe()
+  getUsuarios() {
+    this.usuarioService
+      .getUsers()
+      .pipe(
+        tap((data: any) => {
+          this.usuariosArray = data;
+          console.log(data);
+        }),
+        catchError((error: Error) => {
+          console.log(error);
+          return of([]);
+        })
+      )
+      .subscribe();
   }
 
-  createUser(){
-    if(this.formUser.valid){
-      var user: CreateUser = this.formUser.value
-      if(user.enabled == null){
-        user.enabled = false
+  createUser() {
+    if (
+      this.formUser.get('isVendedor')?.value == true &&
+      !this.formVendedor.valid
+    ) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Agregue el porcentaje de liquidación',
+        timer: 3000,
+        confirmButtonColor: '#3085d6',
+      });
+      return;
+    }
+
+    if (this.formUser.valid) {
+      var user: CreateUser = this.formUser.value;
+      if (user.enabled == null) {
+        user.enabled = false;
       }
-      user.roles = []
+      user.roles = [];
       console.log(user);
-      
-      this.usuarioService.saveUser(user).pipe(
-        tap((data: any) => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Usuario creado',
-            text: 'El usuario ha sido creado exitosamente',
-            timer: 3000,
-            confirmButtonColor: "#3085d6",
+
+      this.usuarioService
+        .saveUser(user)
+        .pipe(
+          tap((data: any) => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Usuario creado',
+              text: 'El usuario ha sido creado exitosamente',
+              timer: 3000,
+              confirmButtonColor: '#3085d6',
+            });
+            this.usuariosArray.push(data);
+            this.formUser.reset();
+            console.log(data);
+          }),
+          catchError((error: Error) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Error al crear el usuario',
+              timer: 3000,
+              confirmButtonColor: '#3085d6',
+            });
+            console.log(error);
+            return of([]);
           })
-          this.usuariosArray.push(data)
-          this.formUser.reset();
-          console.log(data);
-       }), catchError((error: Error) => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Error al crear el usuario',
-            timer: 3000,
-            confirmButtonColor: "#3085d6",
-          })
-          console.log(error);
-          return of([])
-        })
-      ).subscribe()
+        )
+        .subscribe();
     } else {
       Swal.fire({
         icon: 'error',
         title: 'Error',
         text: 'Llene todos los campos',
         timer: 3000,
-        confirmButtonColor: "#3085d6",
-      })
+        confirmButtonColor: '#3085d6',
+      });
     }
   }
 
-  updateUser(){
-    if(this.formUser.valid){
-      var user: CreateUser = this.formUser.value
-      user.roles = []
+  updateUser() {
+    if (this.formUser.valid) {
+      var user: CreateUser = this.formUser.value;
+      user.roles = [];
       console.log(user);
-      
-      this.usuarioService.editUser(user.idUser, user).pipe(
-        tap((data: any) => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Usuario editado',
-            text: 'El usuario ha sido editado exitosamente',
-            timer: 3000,
-            confirmButtonColor: "#3085d6",
+
+      this.usuarioService
+        .editUser(user.idUser, user)
+        .pipe(
+          tap((data: any) => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Usuario editado',
+              text: 'El usuario ha sido editado exitosamente',
+              timer: 3000,
+              confirmButtonColor: '#3085d6',
+            });
+            var pos = this.usuariosArray.findIndex(
+              (u: Usuario) => u.idUser === data.idUser
+            );
+            this.usuariosArray[pos] = data;
+            this.formUser.reset();
+            console.log(data);
+          }),
+          catchError((error: Error) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Error al editar el usuario',
+              timer: 3000,
+              confirmButtonColor: '#3085d6',
+            });
+            console.log(error);
+            return of([]);
           })
-          var pos = this.usuariosArray.findIndex((u: Usuario) => u.idUser === data.idUser)
-          this.usuariosArray[pos]= data;
-          this.formUser.reset();
-          console.log(data);
-       }), catchError((error: Error) => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Error al editar el usuario',
-            timer: 3000,
-            confirmButtonColor: "#3085d6",
-          })
-          console.log(error);
-          return of([])
-        })
-      ).subscribe()
+        )
+        .subscribe();
     } else {
       Swal.fire({
         icon: 'error',
         title: 'Error',
         text: 'Llene todos los campos',
         timer: 3000,
-        confirmButtonColor: "#3085d6",
-      })
+        confirmButtonColor: '#3085d6',
+      });
     }
   }
 
-  getUsuarioById(id: number){
-    var user = this.usuariosArray.find((u: Usuario) => u.idUser === id)
+  getUsuarioById(id: number) {
+    var user = this.usuariosArray.find((u: Usuario) => u.idUser === id);
     console.log(user);
 
     this.formUser.patchValue(user!);
@@ -155,63 +191,65 @@ export class UsuariosComponent implements AfterViewInit {
     }
   }
 
-  getBuscarUsuario(dato: string){
-    if(dato == ''){
+  getBuscarUsuario(dato: string) {
+    if (dato == '') {
       this.getUsuarios();
       return;
     }
 
-    if(this.formSearch.valid){
-      this.usuarioService.buscarUsuario(dato).pipe(
-        tap((data: any) => {
-          this.usuariosArray = data
-          Swal.fire({
-            icon: 'success',
-            title: 'Usuarios encontrados',
-            text: 'Se encontraron estos usuarios',
-            timer: 3000,
-            confirmButtonColor: "#3085d6",
+    if (this.formSearch.valid) {
+      this.usuarioService
+        .buscarUsuario(dato)
+        .pipe(
+          tap((data: any) => {
+            this.usuariosArray = data;
+            Swal.fire({
+              icon: 'success',
+              title: 'Usuarios encontrados',
+              text: 'Se encontraron estos usuarios',
+              timer: 3000,
+              confirmButtonColor: '#3085d6',
+            });
+            console.log(data);
+          }),
+          catchError((error: any) => {
+            if (error.status === 400) {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Usuario no encontrado',
+                timer: 3000,
+                confirmButtonColor: '#3085d6',
+              });
+              console.log(error);
+              return of([]);
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Error al buscar el usuario',
+                timer: 3000,
+                confirmButtonColor: '#3085d6',
+              });
+              console.log(error);
+              return of([]);
+            }
           })
-          console.log(data);
-        }),
-        catchError((error: any) => {
-          if (error.status === 400) {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Usuario no encontrado',
-              timer: 3000,
-              confirmButtonColor: "#3085d6",
-            })
-            console.log(error);
-            return of([])
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Error al buscar el usuario',
-              timer: 3000,
-              confirmButtonColor: "#3085d6",
-            })        
-            console.log(error);
-            return of([])
-          }
-        })
-      ).subscribe()
+        )
+        .subscribe();
     } else {
       Swal.fire({
         icon: 'error',
         title: 'Error',
         text: 'Llene todos los campos',
         timer: 3000,
-        confirmButtonColor: "#3085d6",
-      })
+        confirmButtonColor: '#3085d6',
+      });
     }
   }
 
-  clearUser(){
+  clearUser() {
     this.editUser = false;
     this.formUser.reset();
   }
-
 }

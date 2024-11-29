@@ -1,51 +1,51 @@
 export interface Role {
-    idRole: number;
-    role: string;
+  idRole: number;
+  role: string;
 }
 
 export interface Permission {
-    idPermission: number;
-    permission: string;
+  idPermission: number;
+  permission: string;
 }
 
 export interface UserRoles {
-    idUserRol: number;
-    role: Role;
-    permission: Permission;
+  idUserRol: number;
+  role: Role;
+  permission: Permission;
 }
 
 export interface Authorities {
-    authority: string;
+  authority: string;
 }
 
 export interface Usuario {
-    idUser: number;
-    name: string;
-    lastname: string;
-    email: string;
-    password: string;
-    dateCreated: string;
-    userRoles: UserRoles[];
-    enabled: boolean;
-    accountNonExpired: boolean;
-    accountNonLocked: boolean;
-    credentialsNonExpired: boolean;
-    username: string;
-    authorities: Authorities[];
+  idUser: number;
+  name: string;
+  lastname: string;
+  email: string;
+  password: string;
+  dateCreated: string;
+  userRoles: UserRoles[];
+  enabled: boolean;
+  accountNonExpired: boolean;
+  accountNonLocked: boolean;
+  credentialsNonExpired: boolean;
+  username: string;
+  authorities: Authorities[];
 }
 
 export interface Login {
-    username: string,
-    password: string
-  }
+  username: string;
+  password: string;
+}
 
 export interface CreateUser {
-    idUser: number,
-    name: string,
-    lastname: string,
-    email: string,
-    password: string,
-    enabled: boolean,
-    roles: any[]
-  }
-
+  idUser: number;
+  name: string;
+  lastname: string;
+  email: string;
+  password: string;
+  enabled: boolean;
+  porcentajeLiquidacion: number;
+  roles: any[];
+}
