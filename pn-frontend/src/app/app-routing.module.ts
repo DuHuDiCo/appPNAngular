@@ -8,6 +8,7 @@ import { ClientesComponent } from './Pages/admin/Components/clientes/clientes.co
 import { authGuard } from './Guards/Auth/auth.guard';
 import { loginGuard } from './Guards/Login/login.guard';
 import { ClasificacionComponent } from './Pages/admin/Components/clasificacion/clasificacion.component';
+import { LiquidacionComponent } from './Pages/admin/Components/liquidacion/liquidacion.component';
 
 const routes: Routes = [
   // GENERALES
@@ -15,25 +16,50 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
-    canActivate: [loginGuard]
+    canActivate: [loginGuard],
   },
 
   // MODULO ADMIN
-  { path: 'administracion', redirectTo: 'administracion/usuarios', pathMatch: 'full'},
+  {
+    path: 'administracion',
+    redirectTo: 'administracion/usuarios',
+    pathMatch: 'full',
+  },
   {
     path: 'administracion',
     component: ModuloAdminComponent,
     children: [
-      { path: 'usuarios', component: UsuariosComponent, canActivate: [authGuard] },
-      { path: 'proveedores', component: ProveedoresComponent, canActivate: [authGuard] },
-      { path: 'clientes', component: ClientesComponent, canActivate: [authGuard] },
-      { path: 'clasificacion', component: ClasificacionComponent, canActivate: [authGuard] }, 
-    ]
+      {
+        path: 'usuarios',
+        component: UsuariosComponent,
+        canActivate: [authGuard],
+      },
+      {
+        path: 'proveedores',
+        component: ProveedoresComponent,
+        canActivate: [authGuard],
+      },
+      {
+        path: 'clientes',
+        component: ClientesComponent,
+        canActivate: [authGuard],
+      },
+      {
+        path: 'clasificacion',
+        component: ClasificacionComponent,
+        canActivate: [authGuard],
+      },
+      {
+        path: 'liquidacion',
+        component: LiquidacionComponent,
+        canActivate: [authGuard],
+      },
+    ],
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

@@ -1,0 +1,23 @@
+<div class="mt-5">
+  <h2
+    class="text-center text-2xl font-bold text-gray-700 dark:text-gray-300 mb-4"
+  >
+    Liquidación
+  </h2>
+
+  <form class="flex items-center max-w-5xl mx-auto space-x-6">
+    <!-- Formulario de búsqueda -->
+    <form [formGroup]="formSearch" class="flex-grow">
+      <select
+        (change)="getInventarioByVendedor($event)"
+        formControlName="dato"
+        class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 pl-10 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+      >
+        <option value="" disabled selected>Seleccione un vendedor</option>
+        <option *ngFor="let u of usuariosArray" [value]="u.idUser">
+          {{ u.name }} {{ u.lastname }}
+        </option>
+      </select>
+    </form>
+  </form>
+</div>

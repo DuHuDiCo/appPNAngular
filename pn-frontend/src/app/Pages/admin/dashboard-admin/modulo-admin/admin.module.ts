@@ -7,24 +7,26 @@ import { NavbarAdminComponent } from '../../Components/navbar-admin/navbar-admin
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
-
-
+import { LiquidacionComponent } from '../../Components/liquidacion/liquidacion.component';
+import { ClientesComponent } from '../../Components/clientes/clientes.component';
+import { ClasificacionComponent } from '../../Components/clasificacion/clasificacion.component';
 
 @NgModule({
   declarations: [
     ModuloAdminComponent,
     ProveedoresComponent,
     UsuariosComponent,
-    NavbarAdminComponent
+    NavbarAdminComponent,
+    LiquidacionComponent,
+    ClientesComponent,
+    ClasificacionComponent,
   ],
   imports: [
     CommonModule,
     AppRoutingModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
-  exports: [
-    ModuloAdminComponent
-  ]
+  exports: [ModuloAdminComponent],
 })
-export class AdminModule { }
+export class AdminModule {}

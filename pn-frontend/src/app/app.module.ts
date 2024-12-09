@@ -12,14 +12,10 @@ import { ClientesComponent } from './Pages/admin/Components/clientes/clientes.co
 import { ClasificacionComponent } from './Pages/admin/Components/clasificacion/clasificacion.component';
 import { NgxUiLoaderHttpModule, NgxUiLoaderModule } from 'ngx-ui-loader';
 import { ngxUiLoaderConfig } from 'src/Utils/loaderConfig';
+import { LiquidacionComponent } from './Pages/admin/Components/liquidacion/liquidacion.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    LoginComponent,
-    ClientesComponent,
-    ClasificacionComponent
-  ],
+  declarations: [AppComponent, LoginComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -31,6 +27,6 @@ import { ngxUiLoaderConfig } from 'src/Utils/loaderConfig';
     }),
   ],
   providers: [authInterceptorProviders],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
