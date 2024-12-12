@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { catchError, of, tap } from 'rxjs';
 import { LiquidacionService } from 'src/app/Services/Liquidacion/liquidacion.service';
 import { UsuarioService } from 'src/app/Services/User/usuario.service';
+import { Facturacion } from 'src/Interface/Facturacion.interface';
+import { Liquidacion } from 'src/Interface/Liquidacion.interface';
 import { Usuario } from 'src/Interface/User.type';
 import Swal from 'sweetalert2';
 
@@ -17,6 +19,8 @@ export class LiquidacionComponent implements OnInit {
 
   // ARRAY
   usuariosArray: Usuario[] = [];
+  facturacionesArray: Facturacion[] = [];
+  productosArray: number[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -64,6 +68,7 @@ export class LiquidacionComponent implements OnInit {
               timer: 3000,
               confirmButtonColor: '#3085d6',
             });
+            this.facturacionesArray = [];
             return;
           }
           Swal.fire({
@@ -73,12 +78,56 @@ export class LiquidacionComponent implements OnInit {
             timer: 3000,
             confirmButtonColor: '#3085d6',
           });
+          this.facturacionesArray = data;
         }),
         catchError((error: any) => {
           Swal.fire({
             icon: 'error',
             title: 'Error',
             text: 'Error al buscar la facturacion',
+            timer: 3000,
+            confirmButtonColor: '#3085d6',
+          });
+          console.log(error);
+          return of([]);
+        })
+      )
+      .subscribe();
+  }
+
+  addProducto(id: number) {
+    if (this.productosArray.includes(id)) {
+      this.productosArray = this.productosArray.filter((item) => item !== id);
+    } else {
+      this.productosArray.push(id);
+    }
+    console.log(this.productosArray);
+  }
+
+  createLiquidacion() {
+    var obj: Liquidacion = {
+      idUser: this.formSearch.get('dato')?.value,
+      idProductos: this.productosArray,
+    };
+
+    this.liquidacionService
+      .createLiquidacion(obj)
+      .pipe(
+        tap((data: any) => {
+          console.log(data);
+          Swal.fire({
+            icon: 'success',
+            title: 'Liquidación creada',
+            text: 'Se ha creado la liquidación',
+            timer: 3000,
+            confirmButtonColor: '#3085d6',
+          });
+        }),
+        catchError((error: any) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error al crear la liquidación',
             timer: 3000,
             confirmButtonColor: '#3085d6',
           });

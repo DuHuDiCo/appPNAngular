@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ModuloAdminComponent } from './modulo-admin.component';
 import { ProveedoresComponent } from '../../Components/proveedores/proveedores.component';
@@ -27,6 +27,7 @@ import { ClasificacionComponent } from '../../Components/clasificacion/clasifica
     HttpClientModule,
     ReactiveFormsModule,
   ],
+  providers: [{ provide: LOCALE_ID, useValue: 'es-CO' }],
   exports: [ModuloAdminComponent],
 })
 export class AdminModule {}
