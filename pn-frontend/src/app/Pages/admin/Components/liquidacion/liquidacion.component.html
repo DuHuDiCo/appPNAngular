@@ -25,7 +25,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
       <div *ngFor="let f of facturacionesArray; let i = index">
         <div
-          *ngFor="let f of facturacionesArray[i].productoCompraFacturacion"
+          *ngFor="let f of facturacionesArray"
           class="w-full mb-6 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
         >
           <div class="w-full h-48 overflow-hidden">
@@ -88,5 +88,34 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="floating-button-container" *ngIf="productosArray.length > 0">
+    <button
+      class="floating-button fadeInFromBottom"
+      (click)="createLiquidacion()"
+    >
+      <div class="icon-container">
+        <svg
+          class="w-12 h-12 text-white dark:text-white"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm13.707-1.293a1 1 0 0 0-1.414-1.414L11 12.586l-1.793-1.793a1 1 0 0 0-1.414 1.414l2.5 2.5a1 1 0 0 0 1.414 0l4-4Z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </div>
+      <br />
+      <div class="text-container">
+        <span class="text">Guardar</span>
+      </div>
+    </button>
   </div>
 </div>

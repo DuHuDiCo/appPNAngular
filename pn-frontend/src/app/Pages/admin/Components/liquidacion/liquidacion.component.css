@@ -1,0 +1,66 @@
+.floating-button {
+  position: fixed;
+  bottom: 30px;
+  right: 40px;
+  background-color: #285786;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 999;
+}
+
+.floating-button:hover {
+  background-color: #3d71a4;
+}
+
+.floating-button.fadeInFromBottom {
+  animation: fadeInFromBottom 1s ease forwards;
+}
+
+.floating-button .icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+}
+
+.floating-button .icon-container i {
+  font-size: 40px;
+}
+
+@keyframes iconShrink {
+  0% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(0.7);
+  }
+}
+
+.floating-button:hover .icon-container {
+  animation: iconShrink 0.3s ease forwards;
+  padding-bottom: 30px;
+}
+
+.floating-button .text-container {
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+.floating-button:hover .text-container {
+  opacity: 1;
+  padding-bottom: 15px;
+  font-size: 1.1em;
+}

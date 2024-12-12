@@ -3,7 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { catchError, of, tap } from 'rxjs';
 import { LiquidacionService } from 'src/app/Services/Liquidacion/liquidacion.service';
 import { UsuarioService } from 'src/app/Services/User/usuario.service';
-import { Facturacion } from 'src/Interface/Facturacion.interface';
+import {
+  Facturacion,
+  ProductoCompraFacturacion,
+} from 'src/Interface/Facturacion.interface';
 import { Liquidacion } from 'src/Interface/Liquidacion.interface';
 import { Usuario } from 'src/Interface/User.type';
 import Swal from 'sweetalert2';
@@ -19,7 +22,7 @@ export class LiquidacionComponent implements OnInit {
 
   // ARRAY
   usuariosArray: Usuario[] = [];
-  facturacionesArray: Facturacion[] = [];
+  facturacionesArray: ProductoCompraFacturacion[] = [];
   productosArray: number[] = [];
 
   constructor(
@@ -122,8 +125,21 @@ export class LiquidacionComponent implements OnInit {
             timer: 3000,
             confirmButtonColor: '#3085d6',
           });
+          this.productosArray = [];
+          this.facturacionesArray = [];
+          this.formSearch.reset();
         }),
         catchError((error: any) => {
+          if (error.status === 400) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: error.error.message,
+              timer: 3000,
+              confirmButtonColor: '#3085d6',
+            });
+            return of([]);
+          }
           Swal.fire({
             icon: 'error',
             title: 'Error',
