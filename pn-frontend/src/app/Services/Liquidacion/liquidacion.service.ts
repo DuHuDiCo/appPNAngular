@@ -9,8 +9,12 @@ import { Liquidacion } from 'src/Interface/Liquidacion.interface';
 export class LiquidacionService {
   constructor(private http: HttpClient) {}
 
-  getInventarioByVendedor(id: number) {
+  getFacturaByVendedor(id: number) {
     return this.http.get(`${baseUrl}/facturacion/?idUser=${id}`);
+  }
+
+  getLiquidacionByVendedor(id: number) {
+    return this.http.get(`${baseUrl}/liquidacion/${id}`);
   }
 
   createLiquidacion(data: Liquidacion) {

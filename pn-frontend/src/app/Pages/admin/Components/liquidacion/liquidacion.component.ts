@@ -55,11 +55,11 @@ export class LiquidacionComponent implements OnInit {
       .subscribe();
   }
 
-  getInventarioByVendedor(event: any) {
+  getFacturaByVendedor(event: any) {
     console.log(this.formSearch.get('dato')?.value);
 
     this.liquidacionService
-      .getInventarioByVendedor(this.formSearch.get('dato')?.value)
+      .getFacturaByVendedor(this.formSearch.get('dato')?.value)
       .pipe(
         tap((data: any) => {
           console.log(data);

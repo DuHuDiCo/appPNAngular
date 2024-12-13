@@ -10,6 +10,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { LiquidacionComponent } from '../../Components/liquidacion/liquidacion.component';
 import { ClientesComponent } from '../../Components/clientes/clientes.component';
 import { ClasificacionComponent } from '../../Components/clasificacion/clasificacion.component';
+import { BuscarLiquidacionComponent } from '../../Components/buscar-liquidacion/buscar-liquidacion.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { ClasificacionComponent } from '../../Components/clasificacion/clasifica
     LiquidacionComponent,
     ClientesComponent,
     ClasificacionComponent,
+    BuscarLiquidacionComponent,
   ],
   imports: [
     CommonModule,
@@ -27,7 +29,6 @@ import { ClasificacionComponent } from '../../Components/clasificacion/clasifica
     HttpClientModule,
     ReactiveFormsModule,
   ],
-  providers: [{ provide: LOCALE_ID, useValue: 'es-CO' }],
   exports: [ModuloAdminComponent],
 })
 export class AdminModule {}

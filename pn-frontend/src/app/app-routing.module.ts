@@ -9,6 +9,7 @@ import { authGuard } from './Guards/Auth/auth.guard';
 import { loginGuard } from './Guards/Login/login.guard';
 import { ClasificacionComponent } from './Pages/admin/Components/clasificacion/clasificacion.component';
 import { LiquidacionComponent } from './Pages/admin/Components/liquidacion/liquidacion.component';
+import { BuscarLiquidacionComponent } from './Pages/admin/Components/buscar-liquidacion/buscar-liquidacion.component';
 
 const routes: Routes = [
   // GENERALES
@@ -52,6 +53,11 @@ const routes: Routes = [
       {
         path: 'liquidacion',
         component: LiquidacionComponent,
+        canActivate: [authGuard],
+      },
+      {
+        path: 'liquidacionBuscar',
+        component: BuscarLiquidacionComponent,
         canActivate: [authGuard],
       },
     ],
