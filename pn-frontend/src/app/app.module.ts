@@ -10,6 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgxUiLoaderHttpModule, NgxUiLoaderModule } from 'ngx-ui-loader';
 import { ngxUiLoaderConfig } from 'src/Utils/loaderConfig';
 import { AdminModule } from './Pages/admin/dashboard-admin/modulo-admin/admin.module';
+import { PagoClienteComponent } from './Pages/admin/Components/pago-cliente/pago-cliente.component';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent],
@@ -27,4 +28,4 @@ import { AdminModule } from './Pages/admin/dashboard-admin/modulo-admin/admin.mo
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

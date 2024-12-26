@@ -11,6 +11,7 @@ import { LiquidacionComponent } from '../../Components/liquidacion/liquidacion.c
 import { ClientesComponent } from '../../Components/clientes/clientes.component';
 import { ClasificacionComponent } from '../../Components/clasificacion/clasificacion.component';
 import { BuscarLiquidacionComponent } from '../../Components/buscar-liquidacion/buscar-liquidacion.component';
+import { PagoClienteComponent } from '../../Components/pago-cliente/pago-cliente.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { BuscarLiquidacionComponent } from '../../Components/buscar-liquidacion/
     ClientesComponent,
     ClasificacionComponent,
     BuscarLiquidacionComponent,
+    PagoClienteComponent,
   ],
   imports: [
     CommonModule,
@@ -31,4 +33,4 @@ import { BuscarLiquidacionComponent } from '../../Components/buscar-liquidacion/
   ],
   exports: [ModuloAdminComponent],
 })
-export class AdminModule {}
+export class AdminModule { }

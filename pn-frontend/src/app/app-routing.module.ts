@@ -10,6 +10,7 @@ import { loginGuard } from './Guards/Login/login.guard';
 import { ClasificacionComponent } from './Pages/admin/Components/clasificacion/clasificacion.component';
 import { LiquidacionComponent } from './Pages/admin/Components/liquidacion/liquidacion.component';
 import { BuscarLiquidacionComponent } from './Pages/admin/Components/buscar-liquidacion/buscar-liquidacion.component';
+import { PagoClienteComponent } from './Pages/admin/Components/pago-cliente/pago-cliente.component';
 
 const routes: Routes = [
   // GENERALES
@@ -60,6 +61,11 @@ const routes: Routes = [
         component: BuscarLiquidacionComponent,
         canActivate: [authGuard],
       },
+      {
+        path: 'pagoCliente',
+        component: PagoClienteComponent,
+        canActivate: [authGuard],
+      },
     ],
   },
 ];
@@ -68,4 +74,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
