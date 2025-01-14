@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { DomSanitizer } from '@angular/platform-browser';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { catchError, of, tap } from 'rxjs';
 import { ClienteService } from 'src/app/Services/Cliente/cliente.service';
 import { PagoClienteService } from 'src/app/Services/Pago-clientes/pago-cliente.service';
@@ -8,53 +7,29 @@ import { SaveClient } from 'src/Interface/Client.type';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-pago-cliente',
-  templateUrl: './pago-cliente.component.html',
-  styleUrls: ['./pago-cliente.component.css']
+  selector: 'app-resumen-cuenta',
+  templateUrl: './resumen-cuenta.component.html',
+  styleUrls: ['./resumen-cuenta.component.css']
 })
-export class PagoClienteComponent implements OnInit {
+export class ResumenCuentaComponent implements OnInit {
 
   formSearch!: FormGroup;
-  formPagoCliente!: FormGroup;
 
   pagosClienteArray: any[] = [];
   clientesArray: SaveClient[] = [];
-  isModalOpen: boolean = false;
-  selectedPago: any = {};
-
 
   constructor(
     private formBuilder: FormBuilder,
     private clienteService: ClienteService,
-    private pagoClienteService: PagoClienteService,
-  ) {
+    private pagoClienteService: PagoClienteService) {
     this.formSearch = formBuilder.group({
-      dato: ['', [Validators.required]],
-    });
-
-    this.formPagoCliente = formBuilder.group({
-      idPagoCliente: [''],
-      valor: ['', [Validators.required]],
-      numeroRecibo: ['', [Validators.required]],
-      comprobante: ['', [Validators.required]],
-      tipoPago: ['', [Validators.required]],
-      aplicarPagoDTO: this.formBuilder.array([])
+      dato: ['', []],
     });
   }
 
   ngOnInit(): void {
     this.getPagosClientes();
     this.getClientes();
-  }
-
-  openModal(pago: any) {
-    this.selectedPago = pago;
-    this.isModalOpen = true;
-  }
-
-  closeModal() {
-    this.isModalOpen = false;
-    this.selectedPago = {};
   }
 
   //Metodo para listar los pagos de clientes
@@ -122,49 +97,6 @@ export class PagoClienteComponent implements OnInit {
           });
           console.error(error);
           return of([]);
-        })
-      )
-      .subscribe();
-  }
-
-  createPagoCliente() {
-    if (this.formPagoCliente.invalid) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Por favor, completa todos los campos obligatorios',
-        timer: 3000,
-        confirmButtonColor: '#3085d6',
-      });
-      return;
-    }
-
-    const pagoClienteData = this.formPagoCliente.value;
-
-    this.pagoClienteService.savePagoCliente(pagoClienteData)
-      .pipe(
-        tap((response: any) => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Pago guardado exitosamente',
-            text: 'El pago se ha guardado correctamente',
-            timer: 3000,
-            confirmButtonColor: '#3085d6',
-          });
-          // limpiar el formulario
-          this.formPagoCliente.reset();
-          console.log(response);
-        }),
-        catchError((error: any) => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Hubo un error al guardar el pago',
-            timer: 3000,
-            confirmButtonColor: '#3085d6',
-          });
-          console.error(error);
-          return of(null);
         })
       )
       .subscribe();

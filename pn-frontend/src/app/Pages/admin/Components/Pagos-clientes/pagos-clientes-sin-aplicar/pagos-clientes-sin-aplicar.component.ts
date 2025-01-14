@@ -12,11 +12,23 @@ import Swal from 'sweetalert2';
 export class PagosClientesSinAplicarComponent implements OnInit {
 
   pagosClientesSinAplicarArray: any[] = [];
+  isModalOpen: boolean = false;
+  selectedPago: any = {};
 
   constructor(private pagoClienteService: PagoClienteService) { }
 
   ngOnInit(): void {
     this.getPagosClientesSinAplicar();
+  }
+
+  openModal(pago: any) {
+    this.selectedPago = pago;
+    this.isModalOpen = true;
+  }
+
+  closeModal() {
+    this.isModalOpen = false;
+    this.selectedPago = {};
   }
 
   // Metodo para obtener los pagos de clientes sin aplicar 
