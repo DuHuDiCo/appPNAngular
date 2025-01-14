@@ -10,10 +10,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgxUiLoaderHttpModule, NgxUiLoaderModule } from 'ngx-ui-loader';
 import { ngxUiLoaderConfig } from 'src/Utils/loaderConfig';
 import { AdminModule } from './Pages/admin/dashboard-admin/modulo-admin/admin.module';
-import { PagoClienteComponent } from './Pages/admin/Components/pago-cliente/pago-cliente.component';
+import { PagoClienteComponent } from './Pages/admin/Components/Pagos-clientes/pagos-clientes-aplicados/pago-cliente.component';
+import { PagosClientesSinAplicarComponent } from './Pages/admin/Components/Pagos-clientes/pagos-clientes-sin-aplicar/pagos-clientes-sin-aplicar.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent],
+  declarations: [AppComponent, LoginComponent, PagosClientesSinAplicarComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

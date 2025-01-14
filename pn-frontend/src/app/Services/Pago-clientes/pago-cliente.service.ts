@@ -14,15 +14,23 @@ export class PagoClienteService {
     return this.http.get(`${baseUrl}/pagosClientes/`)
   }
 
+  getPagoClienteSinAplicar() {
+    return this.http.get(`${baseUrl}/pagosClientes/sinAplicar`)
+  }
+
   savePagoCliente(pagoCliente: CreatePagoCliente) {
     return this.http.post(`${baseUrl}/pagosClientes/`, pagoCliente)
+  }
+
+  savePagoClienteAutomatico(pagoCliente: CreatePagoCliente, pagoClienteId: number) {
+    return this.http.post(`${baseUrl}/pagosClientes/automatico?idPagoCliente=${pagoClienteId}`, pagoCliente)
   }
 
   detelePagoCliente(id: number) {
     return this.http.delete(`${baseUrl}/pagosClientes/${id}`)
   }
 
-  obtenerPagoCliente(id: number) {
+  obtenerPagosByCliente(id: number) {
     return this.http.get(`${baseUrl}/pagosClientes/${id}`)
   }
 }

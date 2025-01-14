@@ -11,7 +11,7 @@ import { LiquidacionComponent } from '../../Components/liquidacion/liquidacion.c
 import { ClientesComponent } from '../../Components/clientes/clientes.component';
 import { ClasificacionComponent } from '../../Components/clasificacion/clasificacion.component';
 import { BuscarLiquidacionComponent } from '../../Components/buscar-liquidacion/buscar-liquidacion.component';
-import { PagoClienteComponent } from '../../Components/pago-cliente/pago-cliente.component';
+import { PagoClienteComponent } from '../../Components/Pagos-clientes/pagos-clientes-aplicados/pago-cliente.component';
 
 @NgModule({
   declarations: [

@@ -10,7 +10,8 @@ import { loginGuard } from './Guards/Login/login.guard';
 import { ClasificacionComponent } from './Pages/admin/Components/clasificacion/clasificacion.component';
 import { LiquidacionComponent } from './Pages/admin/Components/liquidacion/liquidacion.component';
 import { BuscarLiquidacionComponent } from './Pages/admin/Components/buscar-liquidacion/buscar-liquidacion.component';
-import { PagoClienteComponent } from './Pages/admin/Components/pago-cliente/pago-cliente.component';
+import { PagoClienteComponent } from './Pages/admin/Components/Pagos-clientes/pagos-clientes-aplicados/pago-cliente.component';
+import { PagosClientesSinAplicarComponent } from './Pages/admin/Components/Pagos-clientes/pagos-clientes-sin-aplicar/pagos-clientes-sin-aplicar.component';
 
 const routes: Routes = [
   // GENERALES
@@ -64,6 +65,11 @@ const routes: Routes = [
       {
         path: 'pagoCliente',
         component: PagoClienteComponent,
+        canActivate: [authGuard],
+      },
+      {
+        path: 'pagosClientesSinAplicar',
+        component: PagosClientesSinAplicarComponent,
         canActivate: [authGuard],
       },
     ],
