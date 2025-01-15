@@ -13,9 +13,10 @@ import { AdminModule } from './Pages/admin/dashboard-admin/modulo-admin/admin.mo
 import { PagoClienteComponent } from './Pages/admin/Components/Pagos-clientes/pagos-clientes-aplicados/pago-cliente.component';
 import { PagosClientesSinAplicarComponent } from './Pages/admin/Components/Pagos-clientes/pagos-clientes-sin-aplicar/pagos-clientes-sin-aplicar.component';
 import { ResumenCuentaComponent } from './Pages/admin/Components/Pagos-clientes/resumen-cuenta/resumen-cuenta.component';
+import { AplicarPagoClienteManualComponent } from './Pages/admin/Components/Pagos-clientes/aplicar-pago-cliente-manual/aplicar-pago-cliente-manual.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, PagosClientesSinAplicarComponent, ResumenCuentaComponent],
+  declarations: [AppComponent, LoginComponent, PagosClientesSinAplicarComponent, ResumenCuentaComponent, AplicarPagoClienteManualComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
