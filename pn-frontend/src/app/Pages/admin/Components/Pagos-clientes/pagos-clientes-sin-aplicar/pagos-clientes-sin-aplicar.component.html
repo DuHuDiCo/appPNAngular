@@ -6,7 +6,7 @@
 
     <form class="flex items-center max-w-5xl mx-auto space-x-6">
         <!-- Botón "Agregar" -->
-        <button type="button" [routerLink]="'/administracion/crearPagoCliente'"
+        <button type="button" data-modal-target="addApliAutoModal" data-modal-toggle="addApliAutoModal"
             class="flex items-center px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
             <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor">
@@ -74,21 +74,21 @@
                                 </svg>
                             </button>
 
-                            <button type="button"
+                            <button type="button" data-modal-target="addApliAutoModal"
+                                data-modal-toggle="addApliAutoModal"
                                 class="p-2 text-white bg-green-600 rounded-full hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300"
-                                title="Aplicar pago manual" (click)="deletePagoCliente(p.idPagoCliente)">
+                                title="Aplicar pago manual">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2-5v-2h4v2h-4zm0-4V9h4v2h-4zm-2-2V7h8v2H8z" />
                                 </svg>
                             </button>
-
-
-
-                            <button type="button"
+                            <!-- Botón para abrir el modal -->
+                            <button type="button" data-modal-target="addApliAutoModal"
+                                data-modal-toggle="addApliAutoModal"
                                 class="p-2 text-white bg-yellow-500 rounded-full hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-yellow-300"
-                                title="Aplicar pago automático" (click)="deletePagoCliente(p.idPagoCliente)">
+                                title="Aplicar pago automático">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 2v20m10-10H2" />
@@ -106,49 +106,110 @@
                             </button>
                         </div>
                     </td>
-
                 </tr>
             </tbody>
         </table>
     </div>
-</div>
 
-<!-- Moda del comprobante del pago-->
-<div id="addClasModal" tabindex="-1" aria-hidden="true" *ngIf="isModalOpen"
-    class="fixed top-0 left-0 right-0 z-50 items-center justify-center flex w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full bg-gray-800 bg-opacity-50">
-    <div class="relative w-full max-w-lg max-h-full">
-        <!-- Modal content -->
-        <form class="relative bg-white rounded-lg shadow-lg dark:bg-gray-800">
-            <!-- Modal header -->
-            <div class="flex items-center justify-between px-6 py-4 bg-primary rounded-t">
-                <h3 class="text-lg font-bold text-white">Comprobante del pago</h3>
-                <button type="button" class="text-white bg-transparent hover:text-gray-200 focus:outline-none"
-                    (click)="closeModal()">
-                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                    <span class="sr-only">Cerrar modal</span>
-                </button>
-            </div>
-            <!-- Modal body -->
-            <div class="px-6 py-4 space-y-4">
-                <!-- Imagen del comprobante -->
-                <div class="flex items-center justify-center">
-                    <img [src]="selectedPago.archivos.urlPath" alt="Comprobante"
-                        class="w-full h-[75vh] border rounded-lg shadow" />
+    <!-- Modal del comprobante del pago-->
+    <div id="addCompModal" tabindex="-1" aria-hidden="true" *ngIf="isModalOpen"
+        class="fixed top-0 left-0 right-0 z-50 items-center justify-center flex w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full bg-gray-800 bg-opacity-50">
+        <div class="relative w-full max-w-lg max-h-full">
+            <!-- Modal content -->
+            <form class="relative bg-white rounded-lg shadow-lg dark:bg-gray-800">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between px-6 py-4 bg-primary rounded-t">
+                    <h3 class="text-lg font-bold text-white">Comprobante del pago</h3>
+                    <button type="button" class="text-white bg-transparent hover:text-gray-200 focus:outline-none"
+                        (click)="closeModal()">
+                        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                        <span class="sr-only">Cerrar modal</span>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <div class="px-6 py-4 space-y-4">
+                    <!-- Imagen del comprobante -->
+                    <div class="flex items-center justify-center">
+                        <img [src]="selectedPago.archivos.urlPath" alt="Comprobante"
+                            class="w-full h-[75vh] border rounded-lg shadow" />
+                    </div>
+
+                </div>
+                <!-- Modal footer -->
+                <div class="flex justify-end px-6 py-4 space-x-3 bg-gray-100 rounded-b dark:bg-gray-700">
+                    <button type="button"
+                        class="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-500 dark:hover:bg-blue-600"
+                        (click)="closeModal()">
+                        Cerrar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de aplicación automática-->
+    <div id="addApliAutoModal" tabindex="-1" aria-hidden="true"
+        class="fixed top-0 left-0 right-0 z-50 items-center justify-center hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full bg-gray-800 bg-opacity-50">
+        <div class="relative w-full max-w-lg max-h-full">
+            <!-- Modal content -->
+            <form class="relative bg-white rounded-lg shadow-lg dark:bg-gray-800">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between px-6 py-4 bg-primary rounded-t">
+                    <h3 class="text-lg font-bold text-white">
+                        Crear Aplicacion de Pago Automatico
+                    </h3>
+                    <button type="button" class="text-white bg-transparent hover:text-gray-200 focus:outline-none"
+                        data-modal-hide="addApliAutoModal">
+                        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                        <span class="sr-only">Cerrar modal</span>
+                    </button>
                 </div>
 
-            </div>
-            <!-- Modal footer -->
-            <div class="flex justify-end px-6 py-4 space-x-3 bg-gray-100 rounded-b dark:bg-gray-700">
-                <button type="button"
-                    class="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-500 dark:hover:bg-blue-600"
-                    (click)="closeModal()">
-                    Cerrar
-                </button>
-            </div>
-        </form>
+                <!-- Modal body -->
+                <div class="px-6 py-4 space-y-4">
+                    <div class="grid grid-cols-6 gap-6">
+                        <div class="col-span-6 sm:col-span-3">
+                            <label for="first-name"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Fecha de
+                                Pago</label>
+                            <input type="text" formControlName="fechaPago" [type]="'date'"
+                                class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500"
+                                required>
+                        </div>
+                        <div class="col-span-6 sm:col-span-3">
+                            <label for="idCliente"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Clientes</label>
+                            <select formControlName="idCliente"
+                                class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500"
+                                required>
+                                <option disabled selected>Selecciona un cliente</option>
+                                <option *ngFor="let u of clientesArray" [value]="u.idClient">
+                                    {{ u.name }} {{ u.lastname }}
+                                </option>
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="flex justify-end px-6 py-4 space-x-3 bg-gray-100 rounded-b dark:bg-gray-700">
+                    <button type="submit"
+                        class="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-500 dark:hover:bg-blue-600">
+                        Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
+
+    <button type="button" data-modal-target="addApliAutoModal" data-modal-toggle="addApliAutoModal" class="hidden"
+        id="modalClick"></button>
 </div>

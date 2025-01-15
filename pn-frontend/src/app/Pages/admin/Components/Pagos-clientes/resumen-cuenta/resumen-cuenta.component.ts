@@ -15,8 +15,11 @@ export class ResumenCuentaComponent implements OnInit {
 
   formSearch!: FormGroup;
 
-  pagosClienteArray: any[] = [];
+  cuentasDTOArray: any[] = [];
   clientesArray: SaveClient[] = [];
+  isModalOpen = false;
+  selectedFactura: any = null;
+  avatarColors = ['#FF5733', '#33FF57', '#3357FF', '#FF33A1'];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -28,21 +31,7 @@ export class ResumenCuentaComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getPagosClientes();
     this.getClientes();
-  }
-
-  //Metodo para listar los pagos de clientes
-  getPagosClientes() {
-    this.pagoClienteService.getPagoCliente().pipe(
-      tap((data: any) => {
-        this.pagosClienteArray = data
-        console.log(data);
-      }), catchError((error: Error) => {
-        console.log(error);
-        return of([])
-      })
-    ).subscribe()
   }
 
   //Metodo para listar los clientes
@@ -58,16 +47,32 @@ export class ResumenCuentaComponent implements OnInit {
     ).subscribe()
   }
 
-  // Metodo para buscar los pagos de un cliente
+  // Función para asignar un color a cada avatar según su índice
+  getAvatarColor(index: number): string {
+    return this.avatarColors[index % this.avatarColors.length];
+  }
+
+  // Método para buscar los pagos de un cliente
   getPagosClienteById(id: number) {
+    if (!id) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Debe seleccionar un cliente',
+        timer: 3000,
+        confirmButtonColor: '#3085d6',
+      });
+      return; // Detener la ejecución si no se selecciona un cliente
+    }
+
     console.log(this.formSearch.get('dato')?.value);
 
     this.pagoClienteService
-      .obtenerPagosByCliente(id)
+      .obtenerFacturacionesByCliente(id)
       .pipe(
-        tap((data: any) => {
-          console.log(data);
-          if (data.length === 0) {
+        tap((response: any) => {
+          console.log(response);
+          if (!response.cuentaDTOs || response.cuentaDTOs.length === 0) {
             Swal.fire({
               icon: 'error',
               title: 'Error',
@@ -75,7 +80,7 @@ export class ResumenCuentaComponent implements OnInit {
               timer: 3000,
               confirmButtonColor: '#3085d6',
             });
-            this.pagosClienteArray = [];
+            this.cuentasDTOArray = [];
             return;
           }
           Swal.fire({
@@ -85,7 +90,7 @@ export class ResumenCuentaComponent implements OnInit {
             timer: 3000,
             confirmButtonColor: '#3085d6',
           });
-          this.pagosClienteArray = data;
+          this.cuentasDTOArray = response.cuentaDTOs;
         }),
         catchError((error: any) => {
           Swal.fire({
@@ -102,4 +107,20 @@ export class ResumenCuentaComponent implements OnInit {
       .subscribe();
   }
 
+  // Abrir modal con la información de la factura seleccionada
+  openModal(factura: any) {
+    this.selectedFactura = factura;
+    this.isModalOpen = true;
+  }
+
+  // Cerrar modal
+  closeModal() {
+    this.isModalOpen = false;
+    this.selectedFactura = null;
+  }
+
+  resetBusqueda() {
+    this.formSearch.reset();
+    this.cuentasDTOArray = [];
+  }
 }

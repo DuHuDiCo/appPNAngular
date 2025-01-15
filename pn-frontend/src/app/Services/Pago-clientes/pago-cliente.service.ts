@@ -33,4 +33,9 @@ export class PagoClienteService {
   obtenerPagosByCliente(id: number) {
     return this.http.get(`${baseUrl}/pagosClientes/${id}`)
   }
+
+  obtenerFacturacionesByCliente(idClient: number) {
+    return this.http.get(`${baseUrl}/facturacion/obtenerFacturacionByClient?idClient=${idClient}`)
+
+  }
 }

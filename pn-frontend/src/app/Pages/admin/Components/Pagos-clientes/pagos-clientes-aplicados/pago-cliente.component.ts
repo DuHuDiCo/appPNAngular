@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { catchError, of, tap } from 'rxjs';
 import { ClienteService } from 'src/app/Services/Cliente/cliente.service';
@@ -17,9 +17,11 @@ export class PagoClienteComponent implements OnInit {
   formSearch!: FormGroup;
   formPagoCliente!: FormGroup;
 
+  comprobantePreview: string | null = null;
   pagosClienteArray: any[] = [];
   clientesArray: SaveClient[] = [];
   isModalOpen: boolean = false;
+  isPagoAplicado: boolean = false;
   selectedPago: any = {};
 
 
@@ -33,7 +35,6 @@ export class PagoClienteComponent implements OnInit {
     });
 
     this.formPagoCliente = formBuilder.group({
-      idPagoCliente: [''],
       valor: ['', [Validators.required]],
       numeroRecibo: ['', [Validators.required]],
       comprobante: ['', [Validators.required]],
@@ -47,11 +48,21 @@ export class PagoClienteComponent implements OnInit {
     this.getClientes();
   }
 
+  get aplicarPagoDTO(): FormArray {
+    return this.formPagoCliente.get('aplicarPagoDTO') as FormArray;
+  }
+
+  togglePago() {
+    this.isPagoAplicado = !this.isPagoAplicado;
+  }
+
+  // Método para abrir el modal del comprobante de pago de cliente
   openModal(pago: any) {
     this.selectedPago = pago;
     this.isModalOpen = true;
   }
 
+  // Método para cerrar el modal del comprobante de pago de cliente
   closeModal() {
     this.isModalOpen = false;
     this.selectedPago = {};
@@ -127,33 +138,59 @@ export class PagoClienteComponent implements OnInit {
       .subscribe();
   }
 
-  createPagoCliente() {
+  // Método para seleccionar un archivo y convertirlo a Base64
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        this.comprobantePreview = reader.result as string;
+        this.formPagoCliente.get('comprobante')?.setValue(this.comprobantePreview);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // Método para abrir el selector de archivos
+  selectImage(): void {
+    const fileInput = document.getElementById('comprobante') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+      fileInput.click();
+    }
+  }
+
+  // Método para crear un pago de cliente y enviar el formulario
+  createPagoCliente(): void {
     if (this.formPagoCliente.invalid) {
       Swal.fire({
         icon: 'error',
         title: 'Error',
         text: 'Por favor, completa todos los campos obligatorios',
         timer: 3000,
-        confirmButtonColor: '#3085d6',
+        confirmButtonColor: '#3085d6'
       });
       return;
     }
 
     const pagoClienteData = this.formPagoCliente.value;
+    console.log(pagoClienteData);
 
-    this.pagoClienteService.savePagoCliente(pagoClienteData)
+    this.pagoClienteService
+      .savePagoCliente(pagoClienteData)
       .pipe(
-        tap((response: any) => {
+        tap(() => {
           Swal.fire({
             icon: 'success',
             title: 'Pago guardado exitosamente',
             text: 'El pago se ha guardado correctamente',
             timer: 3000,
-            confirmButtonColor: '#3085d6',
+            confirmButtonColor: '#3085d6'
           });
-          // limpiar el formulario
           this.formPagoCliente.reset();
-          console.log(response);
+          this.comprobantePreview = null;
         }),
         catchError((error: any) => {
           Swal.fire({
@@ -161,7 +198,7 @@ export class PagoClienteComponent implements OnInit {
             title: 'Error',
             text: 'Hubo un error al guardar el pago',
             timer: 3000,
-            confirmButtonColor: '#3085d6',
+            confirmButtonColor: '#3085d6'
           });
           console.error(error);
           return of(null);
@@ -169,5 +206,4 @@ export class PagoClienteComponent implements OnInit {
       )
       .subscribe();
   }
-
 }
