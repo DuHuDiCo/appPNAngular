@@ -52,7 +52,7 @@ export class ResumenCuentaComponent implements OnInit {
     return this.avatarColors[index % this.avatarColors.length];
   }
 
-  // Método para buscar los pagos de un cliente
+  // Método para buscar los pagos de un cliente y mostrarlos
   getPagosClienteById(id: number) {
     if (!id) {
       Swal.fire({
@@ -62,7 +62,7 @@ export class ResumenCuentaComponent implements OnInit {
         timer: 3000,
         confirmButtonColor: '#3085d6',
       });
-      return; // Detener la ejecución si no se selecciona un cliente
+      return;
     }
 
     console.log(this.formSearch.get('dato')?.value);
@@ -72,6 +72,8 @@ export class ResumenCuentaComponent implements OnInit {
       .pipe(
         tap((response: any) => {
           console.log(response);
+
+          // Verifica si cuentaDTOs existe y si esta vacio
           if (!response.cuentaDTOs || response.cuentaDTOs.length === 0) {
             Swal.fire({
               icon: 'error',
@@ -83,6 +85,24 @@ export class ResumenCuentaComponent implements OnInit {
             this.cuentasDTOArray = [];
             return;
           }
+
+          // Verifica si todos los elementos en cuentaDTOs tienen valor igual a 0
+          const noCuotasDisponibles = response.cuentaDTOs.every(
+            (cuenta: any) => cuenta.valor === 0
+          );
+
+          if (noCuotasDisponibles) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'No hay cuotas disponibles',
+              timer: 3000,
+              confirmButtonColor: '#3085d6',
+            });
+            this.cuentasDTOArray = [];
+            return;
+          }
+
           Swal.fire({
             icon: 'success',
             title: 'Pagos del cliente encontrados',
@@ -119,6 +139,7 @@ export class ResumenCuentaComponent implements OnInit {
     this.selectedFactura = null;
   }
 
+  // Método para resetear la búsqueda
   resetBusqueda() {
     this.formSearch.reset();
     this.cuentasDTOArray = [];

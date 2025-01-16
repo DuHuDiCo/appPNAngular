@@ -1,14 +1,14 @@
 export interface CreatePagoCliente {
-    idPagoCliente: number;
-    valor: number;
-    numeroRecibo: string;
-    comprobante: string;
-    tipoPago: string;
+    idPagoCliente?: number;
+    valor?: number;
+    numeroRecibo?: string;
+    comprobante?: string;
+    tipoPago?: string;
     aplicarPagoDTO: AplicarPagoDTO[];
 }
 
 export interface AplicarPagoDTO {
-    valor: number;
-    idFacturacion: number;
-    fechaPago: Date;
+    valor?: number | null;
+    idFacturacion?: number | null;
+    fechaPago?: Date | null;
 }

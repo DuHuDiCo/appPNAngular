@@ -5,7 +5,7 @@ import { catchError, of, tap } from 'rxjs';
 import Swal from 'sweetalert2';
 import { SaveClient } from 'src/Interface/Client.type';
 import { ClienteService } from 'src/app/Services/Cliente/cliente.service';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-pagos-clientes-sin-aplicar',
@@ -14,16 +14,25 @@ import { FormBuilder } from '@angular/forms';
 })
 export class PagosClientesSinAplicarComponent implements OnInit {
 
+  formPagoCliente!: FormGroup;
+
   pagosClientesSinAplicarArray: any[] = [];
   clientesArray: SaveClient[] = [];
 
   isModalOpen: boolean = false;
+  isModalOpenAplicacionAutomatica: boolean = false;
+  isModalOpenPagoAutomatico: boolean = false;
   selectedPago: any = {};
 
   constructor(private pagoClienteService: PagoClienteService,
     private clienteService: ClienteService,
     private formBuilder: FormBuilder
-  ) { }
+  ) {
+    this.formPagoCliente = this.formBuilder.group({
+      idCliente: ['', Validators.required],
+      fecha: ['', Validators.required],
+    });
+  }
 
   ngOnInit(): void {
     this.getPagosClientesSinAplicar();
@@ -39,6 +48,17 @@ export class PagosClientesSinAplicarComponent implements OnInit {
   // Metodo para cerrar el modal del comprobante de pago de cliente
   closeModal() {
     this.isModalOpen = false;
+    this.selectedPago = {};
+  }
+
+  openModalAplicacionAutomatica(pago: any) {
+    this.selectedPago = pago;
+    this.isModalOpenAplicacionAutomatica = true;
+  }
+
+  // Metodo para cerrar el modal del comprobante de pago de cliente
+  closeModalAplicionAutomatica() {
+    this.isModalOpenAplicacionAutomatica = false;
     this.selectedPago = {};
   }
 
@@ -112,5 +132,54 @@ export class PagosClientesSinAplicarComponent implements OnInit {
         ).subscribe();
       }
     });
+  }
+
+  // Metodo para crear la aplicacion de pago automatica
+  savePagoClienteAutomatico(): void {
+    if (this.formPagoCliente.invalid) {
+      Swal.fire({
+        title: 'Error',
+        text: 'Complete los campos requeridos',
+        icon: 'error',
+        confirmButtonColor: '#3085d6',
+      });
+      return;
+    }
+
+    const aplicarPagoDTO = {
+      valor: this.selectedPago.valor,
+      idCliente: parseInt(this.formPagoCliente.value.idCliente),
+      fecha: this.formPagoCliente.value.fecha,
+    };
+
+    const pagoCliente = { aplicarPagoDTO: [aplicarPagoDTO] };
+
+    const idPagoCliente = this.selectedPago.idPagoCliente;
+
+    this.pagoClienteService.savePagoClienteAutomatico(pagoCliente, idPagoCliente).pipe(
+      tap(() => {
+        Swal.fire({
+          title: 'Pago aplicado',
+          text: 'El pago se ha aplicado con éxito',
+          icon: 'success',
+          confirmButtonColor: '#3085d6',
+        });
+        this.formPagoCliente.reset();
+        this.getPagosClientesSinAplicar();
+      }),
+      catchError((error) => {
+        const errorMessage = error?.error?.message || 'No se pudo aplicar el pago. Inténtelo nuevamente.';
+
+        Swal.fire({
+          title: 'Error',
+          text: errorMessage,
+          icon: 'error',
+          confirmButtonColor: '#3085d6',
+        });
+
+        console.error('Error en el backend:', error);
+        return of([]);
+      })
+    ).subscribe();
   }
 }

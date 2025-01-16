@@ -23,7 +23,7 @@ export class PagoClienteService {
   }
 
   savePagoClienteAutomatico(pagoCliente: CreatePagoCliente, pagoClienteId: number) {
-    return this.http.post(`${baseUrl}/pagosClientes/automatico?idPagoCliente=${pagoClienteId}`, pagoCliente)
+    return this.http.post(`${baseUrl}/pagosClientes/aplicarPagoAutomatico?idPagoCliente=${pagoClienteId}`, pagoCliente)
   }
 
   detelePagoCliente(id: number) {

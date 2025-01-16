@@ -238,11 +238,10 @@
                                 class="block w-full max-w-[300px] mt-1 text-sm border-gray-300 rounded-lg shadow-sm focus:ring-primary focus:border-primary dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
                         </div>
 
-                        <!-- Campos cuando 'isPagoAplicado' es true -->
-                        <div *ngIf="isPagoAplicado">
+                        <div *ngIf="isPagoAplicado" formGroupName="aplicarPagoDTO">
                             <label for="idCliente"
                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300">Clientes</label>
-                            <select id="nuevoCampo1" formControlName="idCliente"
+                            <select id="idCliente" formControlName="idCliente"
                                 class="block w-full max-w-[300px] mt-1 text-sm border-gray-300 rounded-lg shadow-sm focus:ring-primary focus:border-primary dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                 <option value="" disabled selected>Selecciona una opción</option>
                                 <option *ngFor="let u of clientesArray" [value]="u.idClient">
@@ -251,19 +250,20 @@
                             </select>
                         </div>
 
-                        <div *ngIf="isPagoAplicado">
+                        <div *ngIf="isPagoAplicado" formGroupName="aplicarPagoDTO">
                             <label for="fechaPago"
                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300">Fecha de Pago</label>
                             <input id="fechaPago" type="date" formControlName="fechaPago"
                                 class="block w-full max-w-[300px] mt-1 text-sm border-gray-300 rounded-lg shadow-sm focus:ring-primary focus:border-primary dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
                         </div>
-                        <div *ngIf="isPagoAplicado">
-                            <label for="fechaPago"
+
+                        <div *ngIf="isPagoAplicado" formGroupName="aplicarPagoDTO">
+                            <label for="valorPago"
                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300">Valor de Pago</label>
-                            <input id="fechaPago" type="number" formControlName="fechaPago"
-                                placeholder="Digite el valor"
+                            <input id="valorPago" type="number" formControlName="valor" placeholder="Digite el valor"
                                 class="block w-full max-w-[300px] mt-1 text-sm border-gray-300 rounded-lg shadow-sm focus:ring-primary focus:border-primary dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
                         </div>
+
 
                         <div class="flex justify-center items-center mt-4">
                             <button type="button"
@@ -271,7 +271,6 @@
                                 (click)="togglePago()">
                                 {{ isPagoAplicado ? 'Volver' : 'Aplicar Pago' }}
                             </button>
-
                         </div>
                     </div>
 

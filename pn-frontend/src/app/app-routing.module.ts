@@ -13,6 +13,7 @@ import { BuscarLiquidacionComponent } from './Pages/admin/Components/buscar-liqu
 import { PagoClienteComponent } from './Pages/admin/Components/Pagos-clientes/pagos-clientes-aplicados/pago-cliente.component';
 import { PagosClientesSinAplicarComponent } from './Pages/admin/Components/Pagos-clientes/pagos-clientes-sin-aplicar/pagos-clientes-sin-aplicar.component';
 import { ResumenCuentaComponent } from './Pages/admin/Components/Pagos-clientes/resumen-cuenta/resumen-cuenta.component';
+import { AplicarPagoClienteManualComponent } from './Pages/admin/Components/Pagos-clientes/aplicar-pago-cliente-manual/aplicar-pago-cliente-manual.component';
 
 const routes: Routes = [
   // GENERALES
@@ -76,6 +77,11 @@ const routes: Routes = [
       {
         path: 'resumenCuenta',
         component: ResumenCuentaComponent,
+        canActivate: [authGuard],
+      },
+      {
+        path: 'aplicarPagoManual',
+        component: AplicarPagoClienteManualComponent,
         canActivate: [authGuard],
       },
     ],

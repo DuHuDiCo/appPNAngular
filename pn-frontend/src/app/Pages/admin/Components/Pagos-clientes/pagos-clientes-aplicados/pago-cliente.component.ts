@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
+import * as e from 'express';
 import { catchError, of, tap } from 'rxjs';
 import { ClienteService } from 'src/app/Services/Cliente/cliente.service';
 import { PagoClienteService } from 'src/app/Services/Pago-clientes/pago-cliente.service';
@@ -33,13 +34,16 @@ export class PagoClienteComponent implements OnInit {
     this.formSearch = formBuilder.group({
       dato: ['', [Validators.required]],
     });
-
-    this.formPagoCliente = formBuilder.group({
+    this.formPagoCliente = this.formBuilder.group({
       valor: ['', [Validators.required]],
       numeroRecibo: ['', [Validators.required]],
       comprobante: ['', [Validators.required]],
       tipoPago: ['', [Validators.required]],
-      aplicarPagoDTO: this.formBuilder.array([])
+      aplicarPagoDTO: this.formBuilder.group({
+        idCliente: [''],
+        fechaPago: [''],
+        valor: ['']
+      })
     });
   }
 
@@ -48,11 +52,9 @@ export class PagoClienteComponent implements OnInit {
     this.getClientes();
   }
 
-  get aplicarPagoDTO(): FormArray {
-    return this.formPagoCliente.get('aplicarPagoDTO') as FormArray;
-  }
-
+  // Metodo para cambiar a los campos de aplicar pago
   togglePago() {
+    this.getClientes();
     this.isPagoAplicado = !this.isPagoAplicado;
   }
 
@@ -164,6 +166,28 @@ export class PagoClienteComponent implements OnInit {
 
   // Método para crear un pago de cliente y enviar el formulario
   createPagoCliente(): void {
+    const aplicarPagoDTO = this.formPagoCliente.value.aplicarPagoDTO;
+    const aplicarPagoDTOs = aplicarPagoDTO.idCliente || aplicarPagoDTO.fechaPago || aplicarPagoDTO.valor
+      ? [
+        {
+          idCliente: aplicarPagoDTO.idCliente ? parseInt(aplicarPagoDTO.idCliente) : null,
+          fechaPago: aplicarPagoDTO.fechaPago || null,
+          valor: aplicarPagoDTO.valor ? parseInt(aplicarPagoDTO.valor) : null
+        }
+      ]
+      : [];
+
+    const pagoClienteData = {
+      idPagoCliente: this.formPagoCliente.value.idPagoCliente,
+      valor: parseInt(this.formPagoCliente.value.valor),
+      numeroRecibo: this.formPagoCliente.value.numeroRecibo,
+      comprobante: this.formPagoCliente.value.comprobante,
+      tipoPago: this.formPagoCliente.value.tipoPago,
+      aplicarPagoDTO: aplicarPagoDTOs
+    };
+
+    console.log(pagoClienteData);
+
     if (this.formPagoCliente.invalid) {
       Swal.fire({
         icon: 'error',
@@ -174,9 +198,6 @@ export class PagoClienteComponent implements OnInit {
       });
       return;
     }
-
-    const pagoClienteData = this.formPagoCliente.value;
-    console.log(pagoClienteData);
 
     this.pagoClienteService
       .savePagoCliente(pagoClienteData)
@@ -192,10 +213,12 @@ export class PagoClienteComponent implements OnInit {
           this.formPagoCliente.reset();
           this.comprobantePreview = null;
         }),
-        catchError((error: any) => {
+        catchError((error) => {
+          const errorMessage = error?.error?.message || 'No se pudo crear el pago. Inténtelo nuevamente.';
+
           Swal.fire({
             icon: 'error',
-            title: 'Error',
+            title: errorMessage,
             text: 'Hubo un error al guardar el pago',
             timer: 3000,
             confirmButtonColor: '#3085d6'
@@ -206,4 +229,5 @@ export class PagoClienteComponent implements OnInit {
       )
       .subscribe();
   }
+
 }
