@@ -12,3 +12,16 @@ export interface AplicarPagoDTO {
     idFacturacion?: number | null;
     fechaPago?: Date | null;
 }
+
+export interface CreateAbono {
+    idCliente?: number | null;
+    idPagoCliente?: number | null;
+    cuotas?: Cuota[];
+}
+
+export interface Cuota {
+    idCuota?: number | null;
+    valor?: number | null;
+    idFacturacion?: number | null;
+}
+

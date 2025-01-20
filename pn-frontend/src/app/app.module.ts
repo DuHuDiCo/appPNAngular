@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -14,6 +14,7 @@ import { PagoClienteComponent } from './Pages/admin/Components/Pagos-clientes/pa
 import { PagosClientesSinAplicarComponent } from './Pages/admin/Components/Pagos-clientes/pagos-clientes-sin-aplicar/pagos-clientes-sin-aplicar.component';
 import { ResumenCuentaComponent } from './Pages/admin/Components/Pagos-clientes/resumen-cuenta/resumen-cuenta.component';
 import { AplicarPagoClienteManualComponent } from './Pages/admin/Components/Pagos-clientes/aplicar-pago-cliente-manual/aplicar-pago-cliente-manual.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, PagosClientesSinAplicarComponent, ResumenCuentaComponent, AplicarPagoClienteManualComponent],
@@ -22,12 +23,14 @@ import { AplicarPagoClienteManualComponent } from './Pages/admin/Components/Pago
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
+    NgxPaginationModule,
     AdminModule,
     NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
     NgxUiLoaderHttpModule.forRoot({
       showForeground: true,
     }),
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent],
 })

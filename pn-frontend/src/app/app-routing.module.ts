@@ -80,10 +80,11 @@ const routes: Routes = [
         canActivate: [authGuard],
       },
       {
-        path: 'aplicarPagoManual',
+        path: 'aplicarPagoManual/:idPagoCliente',
         component: AplicarPagoClienteManualComponent,
         canActivate: [authGuard],
       },
+
     ],
   },
 ];

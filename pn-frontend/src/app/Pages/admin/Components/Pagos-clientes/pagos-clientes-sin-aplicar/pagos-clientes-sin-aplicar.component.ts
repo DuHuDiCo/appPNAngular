@@ -6,6 +6,8 @@ import Swal from 'sweetalert2';
 import { SaveClient } from 'src/Interface/Client.type';
 import { ClienteService } from 'src/app/Services/Cliente/cliente.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-pagos-clientes-sin-aplicar',
@@ -14,19 +16,25 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class PagosClientesSinAplicarComponent implements OnInit {
 
+  // Formularios
   formPagoCliente!: FormGroup;
 
+  // Arrays
   pagosClientesSinAplicarArray: any[] = [];
   clientesArray: SaveClient[] = [];
 
+  // Modales
   isModalOpen: boolean = false;
   isModalOpenAplicacionAutomatica: boolean = false;
   isModalOpenPagoAutomatico: boolean = false;
+
+  // Variables
   selectedPago: any = {};
 
   constructor(private pagoClienteService: PagoClienteService,
     private clienteService: ClienteService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private router: Router,
   ) {
     this.formPagoCliente = this.formBuilder.group({
       idCliente: ['', Validators.required],
@@ -37,6 +45,17 @@ export class PagosClientesSinAplicarComponent implements OnInit {
   ngOnInit(): void {
     this.getPagosClientesSinAplicar();
     this.getClientes();
+  }
+
+  aplicarPago(p: any): void {
+    const navigationExtras = {
+      state: { valor: p.valor }
+    };
+
+    this.router.navigate(['/administracion/aplicarPagoManual', p.idPagoCliente], navigationExtras);
+    console.log({ valor: p.valor }
+    );
+
   }
 
   // Metodo para abrir el modal del comp0rbte de pago de cliente
@@ -51,6 +70,11 @@ export class PagosClientesSinAplicarComponent implements OnInit {
     this.selectedPago = {};
   }
 
+  verificarValor(p: any): void {
+    console.log('Valor que se envía:', p.valor);
+  }
+
+  // Metodo para abrir el modal de la aplicacion de pago automática
   openModalAplicacionAutomatica(pago: any) {
     this.selectedPago = pago;
     this.isModalOpenAplicacionAutomatica = true;
@@ -75,17 +99,17 @@ export class PagosClientesSinAplicarComponent implements OnInit {
     ).subscribe()
   }
 
-  // Metodo para obtener los pagos de clientes sin aplicar 
+  // Método para obtener los pagos de clientes sin aplicar
   getPagosClientesSinAplicar() {
     this.pagoClienteService.getPagoClienteSinAplicar().pipe(
       tap((data: any) => {
         this.pagosClientesSinAplicarArray = data;
-        console.log(data);
-      }), catchError((error: Error) => {
-        console.log(error);
-        return of([])
+      }),
+      catchError((error: Error) => {
+        console.error('Error al cargar datos:', error);
+        return of([]);
       })
-    ).subscribe()
+    ).subscribe();
   }
 
   // Metodo para eliminar un pago de cliente

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import baseUrl from 'src/Environments/helper';
-import { CreatePagoCliente } from 'src/Interface/PagosClientes.type';
+import { CreateAbono, CreatePagoCliente } from 'src/Interface/PagosClientes.type';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +36,9 @@ export class PagoClienteService {
 
   obtenerFacturacionesByCliente(idClient: number) {
     return this.http.get(`${baseUrl}/facturacion/obtenerFacturacionByClient?idClient=${idClient}`)
+  }
 
+  saveAbono(abono: CreateAbono) {
+    return this.http.post(`${baseUrl}/abono/crear`, abono)
   }
 }
