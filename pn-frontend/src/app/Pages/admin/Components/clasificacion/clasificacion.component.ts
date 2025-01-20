@@ -30,7 +30,7 @@ export class ClasificacionComponent implements AfterViewInit {
     this.getClasificacion();
   }
 
-  getClasificacion(){
+  getClasificacion() {
     this.clasificacionService.getClasificacion().pipe(
       tap((data: any) => {
         this.clasificacionArray = data
@@ -38,17 +38,17 @@ export class ClasificacionComponent implements AfterViewInit {
       }), catchError((error: Error) => {
         console.log(error);
         console.log('Error al obtener la clasificación');
-        
+
         return of([])
       })
     ).subscribe()
   }
 
-  createClasificacion(){
-    if(this.formClasificacion.valid){
+  createClasificacion() {
+    if (this.formClasificacion.valid) {
       var clasificacion: any = this.formClasificacion.value
       console.log(clasificacion);
-      
+
       this.clasificacionService.saveClasificacion(clasificacion).pipe(
         tap((data: any) => {
           Swal.fire({
@@ -61,7 +61,7 @@ export class ClasificacionComponent implements AfterViewInit {
           this.clasificacionArray.push(data)
           this.formClasificacion.reset();
           console.log(data);
-       }), catchError((error: Error) => {
+        }), catchError((error: Error) => {
           Swal.fire({
             icon: 'error',
             title: 'Error',
@@ -84,7 +84,7 @@ export class ClasificacionComponent implements AfterViewInit {
     }
   }
 
-  buscarClasificacion(dato: string){    
+  buscarClasificacion(dato: string) {
     this.clasificacionService.buscarClasificacion(dato).pipe(
       tap((data: any) => {
         this.clasificacionArray = data
@@ -115,56 +115,11 @@ export class ClasificacionComponent implements AfterViewInit {
             text: 'Error al buscar la clasificación',
             timer: 3000,
             confirmButtonColor: "#3085d6",
-          })        
+          })
           console.log(error);
           return of([])
         }
-      })      
+      })
     ).subscribe()
   }
-
-  deleteClasificacion(idClasificacionProducto: number) {
-    Swal.fire({
-      title: "¿Estas seguro?",
-      text: "¡No podrás revertir esto!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Si, eliminar",
-      cancelButtonText: "Cancelar",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.clasificacionService.deleteClasificacion(idClasificacionProducto).pipe(
-          tap((data: any) => {
-            this.clasificacionArray = this.clasificacionArray.filter(
-              (c: any) => c.idClasificacionProducto !== idClasificacionProducto
-            );
-  
-            Swal.fire({
-              icon: "success",
-              title: "Clasificacion eliminada",
-              text: "La clasificacion ha sido eliminado exitosamente",
-              timer: 3000,
-              confirmButtonColor: "#3085d6",
-            });
-  
-            console.log(data); 
-          }),
-          catchError((error: Error) => {
-            Swal.fire({
-              icon: "error",
-              title: "Error",
-              text: "Error al eliminar la clasificacion",
-              timer: 3000,
-              confirmButtonColor: "#3085d6",
-            });
-  
-            console.error(error); 
-            return of([]); 
-          })
-        ).subscribe();
-      }
-    });
-  } 
 }
