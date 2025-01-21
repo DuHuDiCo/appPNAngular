@@ -1,8 +1,9 @@
 import { AfterViewInit, Component, OnInit, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { catchError, of, tap } from 'rxjs';
+import { RolesService } from 'src/app/Services/Roles/roles.service';
 import { UsuarioService } from 'src/app/Services/User/usuario.service';
-import { CreateUser, Usuario } from 'src/Interface/User.type';
+import { CreateUser, Permission, Role, Usuario } from 'src/Interface/User.type';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -19,6 +20,8 @@ export class UsuariosComponent implements AfterViewInit {
 
   // ARRAY
   usuariosArray: Usuario[] = [];
+  rolesArray: Role[] = [];
+  permissionsArray: Permission[] = [];
 
   // VARIABLES
   editUser: boolean = false;
@@ -26,8 +29,9 @@ export class UsuariosComponent implements AfterViewInit {
 
   constructor(
     private usuarioService: UsuarioService,
+    private roleService: RolesService,
     private formBuilder: FormBuilder,
-    private renderer: Renderer2
+    private renderer: Renderer2,
   ) {
     this.formUser = formBuilder.group({
       idUser: [''],
@@ -50,6 +54,36 @@ export class UsuariosComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.getUsuarios();
+    this.getPermissions();
+    this.getRoles();
+  }
+
+  getRoles() {
+    this.roleService.getRoles().pipe(
+      tap((data: any) => {
+        this.rolesArray = data;
+        console.log(data);
+      }),
+      catchError((error: Error) => {
+        console.log(error);
+        return of([]);
+      })
+    )
+      .subscribe();
+  }
+
+  getPermissions() {
+    this.roleService.getPermisos().pipe(
+      tap((data: any) => {
+        this.permissionsArray = data;
+        console.log(data);
+      }),
+      catchError((error: Error) => {
+        console.log(error);
+        return of([]);
+      })
+    )
+      .subscribe();
   }
 
   getUsuarios() {
@@ -85,11 +119,28 @@ export class UsuariosComponent implements AfterViewInit {
 
     if (this.formUser.valid) {
       var user: CreateUser = this.formUser.value;
+
       if (user.enabled == null) {
         user.enabled = false;
       }
-      user.roles = [];
-      console.log(user);
+
+      if (this.formUser.get('isVendedor')?.value == true) {
+        user.roles = [
+          {
+            role: 2,
+            permissions: [],
+          },
+        ];
+      } else {
+        user.roles = [
+          {
+            role: 1,
+            permissions: [],
+          },
+        ];
+      }
+
+      console.log('Usuario enviado al backend:', user);
 
       this.usuarioService
         .saveUser(user)
@@ -104,7 +155,7 @@ export class UsuariosComponent implements AfterViewInit {
             });
             this.usuariosArray.push(data);
             this.formUser.reset();
-            console.log(data);
+            console.log('Respuesta del backend:', data);
           }),
           catchError((error: Error) => {
             Swal.fire({
@@ -114,7 +165,7 @@ export class UsuariosComponent implements AfterViewInit {
               timer: 3000,
               confirmButtonColor: '#3085d6',
             });
-            console.log(error);
+            console.log('Error al crear usuario:', error);
             return of([]);
           })
         )
