@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import baseUrl from 'src/Environments/helper';
 import { CreateUser, Usuario } from 'src/Interface/User.type';
 
@@ -8,21 +9,21 @@ import { CreateUser, Usuario } from 'src/Interface/User.type';
 })
 export class UsuarioService {
 
-  constructor(private http:HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-  getUsers(){
+  getUsers() {
     return this.http.get(`${baseUrl}/user/`)
   }
 
-  saveUser(user: CreateUser){
-    return this.http.post(`${baseUrl}/user/`, user)  
+  saveUser(user: CreateUser): Observable<Usuario> {
+    return this.http.post<Usuario>(`${baseUrl}/user/`, user);
   }
 
-  editUser(id: number, user: CreateUser){
+  editUser(id: number, user: CreateUser) {
     return this.http.put(`${baseUrl}/user/${id}`, user)
   }
 
-  buscarUsuario(dato: string){
+  buscarUsuario(dato: string) {
     return this.http.get(`${baseUrl}/user/nameOrLastName?dato=${dato}`);
   }
 

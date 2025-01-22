@@ -14,10 +14,6 @@ export interface UserRoles {
   permission: Permission;
 }
 
-export interface Authorities {
-  authority: string;
-}
-
 export interface Usuario {
   idUser: number;
   name: string;
@@ -32,6 +28,10 @@ export interface Usuario {
   credentialsNonExpired: boolean;
   username: string;
   authorities: Authorities[];
+}
+
+export interface Authorities {
+  authority: string;
 }
 
 export interface Login {
