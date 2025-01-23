@@ -345,11 +345,11 @@ export class UsuariosComponent implements AfterViewInit {
     console.log(user);
 
     if (user) {
-      // Cargar los roles y permisos
-      this.selectedRoles = user.userRoles.map((userRole: UserRoles) => ({
-        role: userRole.role.idRole,  // Usar el id del role
-        permissions: userRole.permission ? [userRole.permission.idPermission] : [], // Aquí adaptamos el permiso si existe
-      }));
+      // // Cargar los roles y permisos
+      // this.selectedRoles = user.userRoles.map((userRole: UserRoles) => ({
+      //   role: userRole.role.idRole,  // Usar el id del role
+      //   permissions: userRole.permission ? [userRole.permission.idPermission] : [], // Aquí adaptamos el permiso si existe
+      // }));
 
       // Agregar un valor temporal para 'isVendedor' si es necesario
       const isVendedor = user.userRoles.some((userRole: UserRoles) => userRole.role.idRole === 2);
