@@ -125,6 +125,10 @@ export class UsuariosComponent implements AfterViewInit {
       .subscribe();
   }
 
+  isRoleSelected(roleId: number): boolean {
+    return this.selectedRoles.some(selectedRole => selectedRole.role === roleId);
+  }
+
   onRolesChange(roleId: number, event: Event) {
     const isChecked = (event.target as HTMLInputElement).checked;
 
@@ -133,7 +137,12 @@ export class UsuariosComponent implements AfterViewInit {
       this.showPermissions = true;
       this.selectedPermissionIds = [];
 
-      // Verificar si el rol seleccionado es "vendedor"
+
+      const isAdminRole = this.rolesArray.find((role) => role.idRole === roleId && role.role === 'ADMINISTRADOR');
+      if (isAdminRole) {
+        this.selectedPermissionIds = this.permissionsArray.map(permission => permission.idPermission);
+      }
+
       const vendedorRole = this.rolesArray.find((role) => role.idRole === roleId && role.role === 'VENDEDOR');
       this.formUser.patchValue({ isVendedor: !!vendedorRole });
     } else {
@@ -141,7 +150,6 @@ export class UsuariosComponent implements AfterViewInit {
       this.showPermissions = false;
       this.selectedRoles = this.selectedRoles.filter((role) => role.role !== roleId);
 
-      // Si el rol de vendedor se deselecciona, desactivar el campo
       const vendedorRole = this.rolesArray.find((role) => role.idRole === roleId && role.role === 'VENDEDOR');
       if (vendedorRole) {
         this.formUser.patchValue({ isVendedor: false });
@@ -149,16 +157,13 @@ export class UsuariosComponent implements AfterViewInit {
     }
   }
 
-  isRoleSelected(roleId: number): boolean {
-    return this.selectedRoles.some(selectedRole => selectedRole.role === roleId);
-  }
-
-  // Cuando se cambian los permisos, agregamos o eliminamos los permisos de la lista
   onPermissionChange(permissionId: number, event: Event) {
     const isChecked = (event.target as HTMLInputElement).checked;
 
     if (isChecked) {
-      this.selectedPermissionIds.push(permissionId);
+      if (!this.selectedPermissionIds.includes(permissionId)) {
+        this.selectedPermissionIds.push(permissionId);
+      }
     } else {
       this.selectedPermissionIds = this.selectedPermissionIds.filter(id => id !== permissionId);
     }
@@ -351,14 +356,12 @@ export class UsuariosComponent implements AfterViewInit {
       //   permissions: userRole.permission ? [userRole.permission.idPermission] : [], // Aquí adaptamos el permiso si existe
       // }));
 
-      // Agregar un valor temporal para 'isVendedor' si es necesario
       const isVendedor = user.userRoles.some((userRole: UserRoles) => userRole.role.idRole === 2);
       this.formUser.patchValue({
         ...user,
-        isVendedor: isVendedor, // Asignar un valor para 'isVendedor' si corresponde
+        isVendedor: isVendedor,
       });
 
-      // Abrir el modal
       const button = document.getElementById('modalClick');
       if (button) {
         this.editUser = true;

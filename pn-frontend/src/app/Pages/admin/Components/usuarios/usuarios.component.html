@@ -39,6 +39,16 @@
           </svg>
           <span class="sr-only">Buscar</span>
         </button>
+
+        <!-- Botón de búsqueda -->
+        <button type="button" (click)="getUsuarios()"
+          class="px-4 py-2 text-sm font-medium text-white bg-gray-500 rounded-lg border border-gray-500 hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800 dark:focus:ring-gray-900">
+          <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M6 18L18 6M6 6l12 12" />
+          </svg>
+          <span class="sr-only">Limpiar</span>
+        </button>
       </div>
     </form>
   </form>
@@ -204,13 +214,12 @@
               </div>
             </div>
           </div>
-          <!-- Sección de permisos -->
+          <!-- Seccion de permisos -->
           <div *ngIf="showPermissions">
-            <!-- Porcentaje -->
             <form [formGroup]="formVendedor">
               <div *ngIf="formUser.get('isVendedor')?.value === true" class="col-span-4 sm:col-span-1">
                 <label for="porcentaje" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                  Porcentaje de Liquidación
+                  Porcentaje de Liquidación del vendedor
                 </label>
                 <input type="text" formControlName="porcentaje" placeholder="Escribe el porcentaje"
                   class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500"
@@ -219,12 +228,13 @@
             </form>
 
             <div class="mt-8">
-
-              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300 text-center">Seleccione los
-                Permisos</label>
-              <div class="grid grid-cols-3 gap-4">
+              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300 text-center">
+                Seleccione los Permisos
+              </label>
+              <div class="grid grid-cols-3 gap-4 max-h-[400px] overflow-y-auto border p-4 rounded-md">
                 <div *ngFor="let permission of permissionsArray" class="flex items-center">
                   <input type="checkbox" [id]="'permission-' + permission.idPermission"
+                    [checked]="selectedPermissionIds.includes(permission.idPermission)"
                     (change)="onPermissionChange(permission.idPermission, $event)"
                     class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600" />
                   <label [for]="'permission-' + permission.idPermission"
@@ -234,7 +244,6 @@
                 </div>
               </div>
             </div>
-
           </div>
         </div>
         <!-- Modal footer -->
@@ -277,7 +286,7 @@
           </button>
         </div>
         <!-- Modal body -->
-        <div class="px-6 py-4 space-y-4 text-center">
+        <div class="px-6 py-4 space-y-4 text-center max-h-[400px] overflow-y-auto">
           <ul class="space-y-2">
             <li *ngFor="let permiso of selectedUserPermissions" class="text-sm text-gray-700 dark:text-gray-300">
               {{ permiso }}
