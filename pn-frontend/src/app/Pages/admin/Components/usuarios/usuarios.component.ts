@@ -15,7 +15,6 @@ export class UsuariosComponent implements AfterViewInit {
   // FORMS
   formUser!: FormGroup;
   formVendedor!: FormGroup;
-
   formSearch!: FormGroup;
 
   // ARRAY
@@ -28,6 +27,7 @@ export class UsuariosComponent implements AfterViewInit {
   showPermissionsModal: boolean = false;
   selectedUserPermissions: string[] = [];
   showPermissions = false;
+  showPermissionsEdit = false;
   selectedRoleId: number | null = null;
   vendedorRoleId: number | null = null;
   editUser: boolean = false;
@@ -79,57 +79,78 @@ export class UsuariosComponent implements AfterViewInit {
     this.showPermissionsModal = false;
   }
 
-  togglePermissions() {
-    this.showPermissions = !this.showPermissions;
-  }
-
-  getRoles(): void {
-    this.roleService.getRoles().pipe(
-      tap((data: Role[]) => {
-        this.rolesArray = data;
-        console.log(this.rolesArray);
-      }),
-      catchError((error: Error) => {
-        console.error('Error al obtener los roles:', error);
-        return of([]);
-      })
-    ).subscribe();
-  }
-
-  getPermissions() {
-    this.roleService.getPermisos().pipe(
-      tap((data: Permission[]) => {
-        this.permissionsArray = data;
-        console.log(data);
-      }),
-      catchError((error: Error) => {
-        console.error('Error al obtener los permisos:', error);
-        return of([]);
-      })
-    ).subscribe();
-  }
-
-  getUsuarios() {
-    this.usuarioService
-      .getUsers()
-      .pipe(
-        tap((data: any) => {
-          this.usuariosArray = data;
-          console.log(data);
-        }),
-        catchError((error: Error) => {
-          console.log(error);
-          return of([]);
-        })
-      )
-      .subscribe();
-  }
-
   isRoleSelected(roleId: number): boolean {
     return this.selectedRoles.some(selectedRole => selectedRole.role === roleId);
   }
 
-  onRolesChange(roleId: number, event: Event) {
+  // Nuevo método para cargar permisos al editar
+  loadUserPermissions(user: Usuario) {
+    if (this.selectedRoleId !== null) {
+      // Buscar el rol seleccionado en el usuario
+      const selectedRole = user.userRoles.find((role: UserRoles) => role.role.idRole === this.selectedRoleId);
+
+      if (selectedRole && selectedRole.permission) {
+        // Asegúrate de que permission sea un array y usa map
+        this.selectedPermissionIds = selectedRole.permission.map((perm: Permission) => perm.idPermission);
+        console.log('Permisos cargados desde loadUserPermissions:', this.selectedPermissionIds);
+      } else {
+        console.log('No se encontraron permisos para este rol.');
+        this.selectedPermissionIds = [];
+      }
+    }
+  }
+
+  getSelectedUser(): Usuario | null {
+    if (!this.editUser || !this.selectedRoleId) {
+      return null;
+    }
+
+    const user = this.usuariosArray.find((u: Usuario) =>
+      u.userRoles.some(userRole => userRole.role.idRole === this.selectedRoleId)
+    );
+
+    return user || null;
+  }
+
+  togglePermissions() {
+    if (this.editUser) {
+      if (this.showPermissions) {
+        // Si esta en "howPermissions simplemente regresa
+        this.showPermissions = false;
+        console.log("Volviendo atrás en modo edición");
+      } else {
+        // Si no esta en showPermissions cargar los permisos del usuario
+        if (this.selectedRoleId !== null) {
+          const user = this.getSelectedUser();
+          if (user) {
+            this.loadUserPermissions(user);
+            this.showPermissions = true;
+            console.log("Permisos cargados:", this.selectedPermissionIds);
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'No se encontró un usuario asociado al rol seleccionado.',
+              timer: 3000,
+              confirmButtonColor: '#3085d6',
+            });
+          }
+        } else {
+          Swal.fire({
+            icon: 'warning',
+            title: 'Sin Rol Seleccionado',
+            text: 'Por favor, selecciona un rol antes de ver los permisos.',
+            timer: 3000,
+            confirmButtonColor: '#3085d6',
+          });
+        }
+      }
+    } else {
+      this.showPermissions = !this.showPermissions;
+    }
+  }
+
+  onRolesChange(roleId: number, event: Event): void {
     const isChecked = (event.target as HTMLInputElement).checked;
 
     if (isChecked) {
@@ -137,21 +158,26 @@ export class UsuariosComponent implements AfterViewInit {
       this.showPermissions = true;
       this.selectedPermissionIds = [];
 
+      if (this.editUser) {
+        const user = this.getSelectedUser();
+        if (user) {
+          this.loadUserPermissions(user);
+        }
+      } else {
+        const isAdminRole = this.rolesArray.find((role) => role.idRole === roleId && role.role === 'ADMINISTRADOR');
+        if (isAdminRole) {
+          this.selectedPermissionIds = this.permissionsArray.map(permission => permission.idPermission);
+        }
 
-      const isAdminRole = this.rolesArray.find((role) => role.idRole === roleId && role.role === 'ADMINISTRADOR');
-      if (isAdminRole) {
-        this.selectedPermissionIds = this.permissionsArray.map(permission => permission.idPermission);
+        const vendedorRole = this.rolesArray.find((role) => role.idRole === roleId && role.role === 'VENDEDOR');
+        this.formUser.patchValue({ isVendedor: !!vendedorRole });
       }
-
-      const vendedorRole = this.rolesArray.find((role) => role.idRole === roleId && role.role === 'VENDEDOR');
-      this.formUser.patchValue({ isVendedor: !!vendedorRole });
     } else {
       this.selectedRoleId = null;
       this.showPermissions = false;
-      this.selectedRoles = this.selectedRoles.filter((role) => role.role !== roleId);
 
-      const vendedorRole = this.rolesArray.find((role) => role.idRole === roleId && role.role === 'VENDEDOR');
-      if (vendedorRole) {
+      this.selectedRoles = this.selectedRoles.filter((role) => role.role !== roleId);
+      if (this.rolesArray.find((role) => role.idRole === roleId && role.role === 'VENDEDOR')) {
         this.formUser.patchValue({ isVendedor: false });
       }
     }
@@ -171,25 +197,140 @@ export class UsuariosComponent implements AfterViewInit {
     console.log(this.selectedPermissionIds);
   }
 
-  // Al hacer clic en el botón Agregar agregamos el rol y sus permisos al array de roles
   addRoleWithPermissions() {
     if (this.selectedRoleId !== null && this.selectedPermissionIds.length > 0) {
-      const newRole = {
-        role: this.selectedRoleId,
-        permissions: [...this.selectedPermissionIds],
-      };
+      const existingRole = this.selectedRoles.find(role => role.role === this.selectedRoleId);
 
-      this.selectedRoles.push(newRole);
-      console.log('Roles seleccionados:', this.selectedRoles);
+      if (existingRole) {
+        existingRole.permissions = [...new Set([...existingRole.permissions, ...this.selectedPermissionIds])];
+        console.log('Permisos actualizados para el rol existente:', existingRole);
+      } else {
+        const newRole = {
+          role: this.selectedRoleId,
+          permissions: [...this.selectedPermissionIds],
+        };
+        this.selectedRoles.push(newRole);
+        console.log('Nuevo rol creado:', newRole);
+      }
 
       this.selectedPermissionIds = [];
       this.selectedRoleId = null;
       this.showPermissions = false;
+
+      console.log('Roles seleccionados:', this.selectedRoles);
     } else {
       Swal.fire({
         icon: 'error',
         title: 'Error',
         text: 'Por favor, seleccione un rol y al menos un permiso.',
+        timer: 3000,
+        confirmButtonColor: '#3085d6',
+      });
+    }
+  }
+
+  // Metodo para actualizar un usuariob y sus roles y permisos
+  updateUser() {
+    if (this.formUser.valid) {
+      const user: CreateUser = { ...this.formUser.value };
+
+      user.roles = this.selectedRoles.map((role) => ({
+        role: role.role,
+        permissions: role.permissions,
+      }));
+
+      if (user.enabled == null) {
+        user.enabled = false;
+      }
+
+      if (this.formUser.get('isVendedor')?.value === true) {
+        user.porcentajeLiquidacion = Number(this.formVendedor.get('porcentaje')?.value);
+      }
+
+      console.log('Usuario enviado al backend:', user);
+
+      this.usuarioService
+        .editUser(user.idUser, user)
+        .pipe(
+          tap((data: any) => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Usuario editado',
+              text: 'El usuario ha sido editado exitosamente',
+              timer: 3000,
+              confirmButtonColor: '#3085d6',
+            });
+
+            const pos = this.usuariosArray.findIndex(
+              (u: Usuario) => u.idUser === data.idUser
+            );
+            if (pos !== -1) {
+              this.usuariosArray[pos] = data;
+            }
+
+            this.formUser.reset();
+            this.formVendedor.reset();
+            console.log(data);
+          }),
+          catchError((error: Error) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Error al editar el usuario',
+              timer: 3000,
+              confirmButtonColor: '#3085d6',
+            });
+            console.log(error);
+            return of([]);
+          })
+        )
+        .subscribe();
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Llene todos los campos',
+        timer: 3000,
+        confirmButtonColor: '#3085d6',
+      });
+    }
+  }
+
+  getUsuarioById(id: number) {
+    this.showPermissionsEdit = true;
+    const user = this.usuariosArray.find((u: Usuario) => u.idUser === id);
+    console.log(user);
+
+    if (user) {
+      console.log('Roles y permisos del usuario:', user.userRoles);
+
+      this.selectedRoles = user.userRoles.map((userRole: UserRoles) => ({
+        role: userRole.role.idRole,
+        permissions: userRole.permission.length > 0 ? userRole.permission.map((perm: Permission) => perm.idPermission) : [],
+      }));
+
+
+      this.selectedRoleId = this.selectedRoles.length > 0 ? this.selectedRoles[0].role : null;
+      this.selectedPermissionIds = this.selectedRoles.flatMap(role => role.permissions);
+
+      const isVendedor = user.userRoles.some((userRole: UserRoles) => userRole.role.idRole === 2);
+      this.formUser.patchValue({
+        ...user,
+        isVendedor: isVendedor,
+        porcentajeLiquidacion: this.formVendedor.get('porcentaje')?.value,
+      });
+
+
+      const button = document.getElementById('modalClick');
+      if (button) {
+        this.editUser = true;
+        this.renderer.selectRootElement(button).click();
+      }
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Usuario no encontrado',
         timer: 3000,
         confirmButtonColor: '#3085d6',
       });
@@ -276,106 +417,46 @@ export class UsuariosComponent implements AfterViewInit {
     }
   }
 
-  updateUser() {
-    if (this.formUser.valid) {
-      const user: CreateUser = { ...this.formUser.value };
-
-      // Asegúrate de que los roles y permisos estén correctamente formateados
-      user.roles = this.selectedRoles.map((role) => ({
-        role: role.role,
-        permissions: role.permissions,
-      }));
-
-      // Verifica si el campo 'enabled' está presente, y si no, asigna 'false'
-      if (user.enabled == null) {
-        user.enabled = false;
-      }
-
-      // Si es vendedor, asegúrate de enviar el porcentaje de liquidación
-      if (this.formUser.get('isVendedor')?.value === true) {
-        user.porcentajeLiquidacion = Number(this.formVendedor.get('porcentaje')?.value);
-      }
-
-      console.log('Usuario enviado al backend:', user);
-
-      this.usuarioService
-        .editUser(user.idUser, user)
-        .pipe(
-          tap((data: any) => {
-            Swal.fire({
-              icon: 'success',
-              title: 'Usuario editado',
-              text: 'El usuario ha sido editado exitosamente',
-              timer: 3000,
-              confirmButtonColor: '#3085d6',
-            });
-
-            const pos = this.usuariosArray.findIndex(
-              (u: Usuario) => u.idUser === data.idUser
-            );
-            if (pos !== -1) {
-              this.usuariosArray[pos] = data;
-            }
-
-            this.formUser.reset();
-            this.formVendedor.reset();
-            console.log(data);
-          }),
-          catchError((error: Error) => {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Error al editar el usuario',
-              timer: 3000,
-              confirmButtonColor: '#3085d6',
-            });
-            console.log(error);
-            return of([]); // Cambiado de [] a un valor adecuado si es necesario
-          })
-        )
-        .subscribe();
-    } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Llene todos los campos',
-        timer: 3000,
-        confirmButtonColor: '#3085d6',
-      });
-    }
+  getRoles(): void {
+    this.roleService.getRoles().pipe(
+      tap((data: Role[]) => {
+        this.rolesArray = data;
+        console.log(this.rolesArray);
+      }),
+      catchError((error: Error) => {
+        console.error('Error al obtener los roles:', error);
+        return of([]);
+      })
+    ).subscribe();
   }
 
-  getUsuarioById(id: number) {
-    const user = this.usuariosArray.find((u: Usuario) => u.idUser === id);
-    console.log(user);
+  getPermissions() {
+    this.roleService.getPermisos().pipe(
+      tap((data: Permission[]) => {
+        this.permissionsArray = data;
+        console.log(data);
+      }),
+      catchError((error: Error) => {
+        console.error('Error al obtener los permisos:', error);
+        return of([]);
+      })
+    ).subscribe();
+  }
 
-    if (user) {
-      // // Cargar los roles y permisos
-      // this.selectedRoles = user.userRoles.map((userRole: UserRoles) => ({
-      //   role: userRole.role.idRole,  // Usar el id del role
-      //   permissions: userRole.permission ? [userRole.permission.idPermission] : [], // Aquí adaptamos el permiso si existe
-      // }));
-
-      const isVendedor = user.userRoles.some((userRole: UserRoles) => userRole.role.idRole === 2);
-      this.formUser.patchValue({
-        ...user,
-        isVendedor: isVendedor,
-      });
-
-      const button = document.getElementById('modalClick');
-      if (button) {
-        this.editUser = true;
-        this.renderer.selectRootElement(button).click();
-      }
-    } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Usuario no encontrado',
-        timer: 3000,
-        confirmButtonColor: '#3085d6',
-      });
-    }
+  getUsuarios() {
+    this.usuarioService
+      .getUsers()
+      .pipe(
+        tap((data: any) => {
+          this.usuariosArray = data;
+          console.log(data);
+        }),
+        catchError((error: Error) => {
+          console.log(error);
+          return of([]);
+        })
+      )
+      .subscribe();
   }
 
   getBuscarUsuario(dato: string) {
@@ -438,5 +519,14 @@ export class UsuariosComponent implements AfterViewInit {
   clearUser() {
     this.editUser = false;
     this.formUser.reset();
+  }
+
+  closeModal() {
+    this.showPermissionsEdit = false;
+    this.showPermissions = false;
+    this.formUser.reset();
+    this.formVendedor.reset();
+    this.selectedRoles = [];
+    this.selectedPermissionIds = [];
   }
 }

@@ -142,8 +142,8 @@
           <h3 class="text-lg font-bold text-white">
             {{ editUser ? "Editar Usuario" : "Crear Usuario" }}
           </h3>
-          <button type="button" class="text-white bg-transparent hover:text-gray-200 focus:outline-none"
-            data-modal-hide="editUserModal">
+          <button (click)="closeModal()" type="button"
+            class="text-white bg-transparent hover:text-gray-200 focus:outline-none" data-modal-hide="editUserModal">
             <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M6 18L18 6M6 6l12 12" />
@@ -210,6 +210,18 @@
                     class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                     {{ role.role }}
                   </label>
+                  <button (click)="togglePermissions()" *ngIf="editUser" type="button"
+                    class="p-2 text-white bg-primary rounded-full border-primary focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800 ml-4"
+                    title="Editar Roles">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
+                      stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M15.232 5.232a1 1 0 0 1 1.414 0l2.122 2.122a1 1 0 0 1 0 1.414l-3.383 3.383a1 1 0 0 1-1.414 0L15.232 6.724a1 1 0 0 1 0-1.414L11.383 3.762a1 1 0 0 1 1.414 0L15.232 5.232z" />
+                      <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <span class="sr-only">Ver Permisos</span>
+                  </button>
                 </div>
               </div>
             </div>
@@ -217,7 +229,7 @@
           <!-- Seccion de permisos -->
           <div *ngIf="showPermissions">
             <form [formGroup]="formVendedor">
-              <div *ngIf="formUser.get('isVendedor')?.value === true" class="col-span-4 sm:col-span-1">
+              <div *ngIf="selectedRoleId === 2" class="col-span-4 sm:col-span-1"> <!-- ID 2 para el rol Vendedor -->
                 <label for="porcentaje" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                   Porcentaje de Liquidación del vendedor
                 </label>

@@ -11,7 +11,7 @@ export interface Permission {
 export interface UserRoles {
   idUserRol: number;
   role: Role;
-  permission: Permission;
+  permission: Permission[];
 }
 
 export interface Usuario {
@@ -23,6 +23,7 @@ export interface Usuario {
   dateCreated: string;
   userRoles: UserRoles[];
   enabled: boolean;
+  porcentajeLiquidacion: number;
   accountNonExpired: boolean;
   accountNonLocked: boolean;
   credentialsNonExpired: boolean;
