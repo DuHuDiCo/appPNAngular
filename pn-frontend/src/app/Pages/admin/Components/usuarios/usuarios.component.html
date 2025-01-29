@@ -210,7 +210,7 @@
                     class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                     {{ role.role }}
                   </label>
-                  <button (click)="togglePermissions()" *ngIf="editUser" type="button"
+                  <button (click)="onRoleSelect(role.idRole)" *ngIf="editUser && !isAdminRole(role)" type="button"
                     class="p-2 text-white bg-primary rounded-full border-primary focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800 ml-4"
                     title="Editar Roles">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
@@ -222,6 +222,7 @@
                     </svg>
                     <span class="sr-only">Ver Permisos</span>
                   </button>
+
                 </div>
               </div>
             </div>
