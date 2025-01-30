@@ -180,7 +180,6 @@ export class UsuariosComponent implements AfterViewInit {
       this.selectedRoleId = roleId;
       this.selectedPermissionIds = [];
 
-      // Verificamos si el rol es ADMINISTRADOR
       const isAdminRole = this.rolesArray.find((role) => role.idRole === roleId && role.role === 'ADMINISTRADOR');
 
       if (isAdminRole) {
@@ -197,6 +196,7 @@ export class UsuariosComponent implements AfterViewInit {
         }
       }
     } else {
+      this.selectedRoles = this.selectedRoles.filter(role => role.role !== roleId);
       this.selectedRoleId = null;
       this.showPermissions = false;
       this.selectedPermissionIds = [];
@@ -219,6 +219,19 @@ export class UsuariosComponent implements AfterViewInit {
 
   // Metodo para agregar un rol con permisos
   addRoleWithPermissions() {
+    if (this.formUser.get('isVendedor')?.value === true) {
+      if (!this.formVendedor.get('porcentaje')?.valid) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Por favor, agregue un porcentaje válido de liquidación.',
+          timer: 3000,
+          confirmButtonColor: '#3085d6',
+        });
+        return;
+      }
+    }
+
     if (this.selectedRoleId !== null && this.selectedPermissionIds.length > 0) {
       const existingRole = this.selectedRoles.find(role => role.role === this.selectedRoleId);
 
@@ -233,6 +246,7 @@ export class UsuariosComponent implements AfterViewInit {
         this.selectedRoles.push(newRole);
         console.log('Nuevo rol creado:', newRole);
       }
+
       this.selectedPermissionIds = [];
       this.selectedRoleId = null;
       this.showPermissions = false;
@@ -251,6 +265,17 @@ export class UsuariosComponent implements AfterViewInit {
 
   // Metodo para actualizar un usuariob y sus roles y permisos
   updateUser() {
+    if (this.selectedRoles.length === 0) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Debe seleccionar al menos un rol.',
+        timer: 3000,
+        confirmButtonColor: '#3085d6',
+      });
+      return;
+    }
+
     if (this.formUser.valid) {
       const user: CreateUser = { ...this.formUser.value };
 
@@ -321,7 +346,7 @@ export class UsuariosComponent implements AfterViewInit {
     }
   }
 
-  // Metodo para obtener el usuario por su id
+  // Método para obtener el usuario por su id
   getUsuarioById(id: number) {
     this.showPermissionsEdit = true;
     const user = this.usuariosArray.find((u: Usuario) => u.idUser === id);
@@ -340,11 +365,12 @@ export class UsuariosComponent implements AfterViewInit {
       this.selectedPermissionIds = this.selectedRoles.flatMap(role => role.permissions);
 
       const isVendedor = user.userRoles.some((userRole: UserRoles) => userRole.role.idRole === 2);
+
       this.formUser.patchValue({
         ...user,
         isVendedor: isVendedor,
-        porcentajeLiquidacion: this.formVendedor.get('porcentaje')?.value,
       });
+
 
       const button = document.getElementById('modalClick');
       if (button) {
@@ -364,25 +390,23 @@ export class UsuariosComponent implements AfterViewInit {
 
   // Método para crear el usuario
   createUser(): void {
+    if (this.selectedRoles.length === 0) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Debe seleccionar al menos un rol.',
+        timer: 3000,
+        confirmButtonColor: '#3085d6',
+      });
+      return;
+    }
+
     const isVendedorSelected = this.selectedRoles.some(role => role.role === 2);
 
     if (isVendedorSelected) {
       this.formUser.get('isVendedor')?.setValue(true);
     } else {
       this.formUser.get('isVendedor')?.setValue(false);
-    }
-
-    if (this.formUser.get('isVendedor')?.value === true) {
-      if (!this.formVendedor.get('porcentaje')?.valid) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Por favor, agregue un porcentaje válido de liquidación.',
-          timer: 3000,
-          confirmButtonColor: '#3085d6',
-        });
-        return;
-      }
     }
 
     if (this.formUser.valid) {
@@ -405,35 +429,35 @@ export class UsuariosComponent implements AfterViewInit {
 
       console.log("Usuario a enviar:", user);
 
-      this.usuarioService
-        .saveUser(user)
-        .pipe(
-          tap((data) => {
-            Swal.fire({
-              icon: 'success',
-              title: 'Usuario creado',
-              text: 'El usuario ha sido creado exitosamente.',
-              timer: 3000,
-              confirmButtonColor: '#3085d6',
-            });
-            this.usuariosArray.push(data);
-            this.formUser.reset();
-            this.selectedRoles = [];
-            this.formVendedor.reset();
-          }),
-          catchError((error) => {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Error al crear el usuario.',
-              timer: 3000,
-              confirmButtonColor: '#3085d6',
-            });
-            console.error('Error al crear usuario:', error);
-            return of([]);
-          })
-        )
-        .subscribe();
+      // this.usuarioService
+      //   .saveUser(user)
+      //   .pipe(
+      tap((data) => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Usuario creado',
+          text: 'El usuario ha sido creado exitosamente.',
+          timer: 3000,
+          confirmButtonColor: '#3085d6',
+        });
+        // this.usuariosArray.push(data);
+        this.formUser.reset();
+        this.selectedRoles = [];
+        this.formVendedor.reset();
+      }),
+        catchError((error) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error al crear el usuario.',
+            timer: 3000,
+            confirmButtonColor: '#3085d6',
+          });
+          console.error('Error al crear usuario:', error);
+          return of([]);
+        })
+      // )
+      // .subscribe();
     } else {
       Swal.fire({
         icon: 'error',
