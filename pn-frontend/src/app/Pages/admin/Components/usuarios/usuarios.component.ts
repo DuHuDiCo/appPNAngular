@@ -429,35 +429,35 @@ export class UsuariosComponent implements AfterViewInit {
 
       console.log("Usuario a enviar:", user);
 
-      // this.usuarioService
-      //   .saveUser(user)
-      //   .pipe(
-      tap((data) => {
-        Swal.fire({
-          icon: 'success',
-          title: 'Usuario creado',
-          text: 'El usuario ha sido creado exitosamente.',
-          timer: 3000,
-          confirmButtonColor: '#3085d6',
-        });
-        // this.usuariosArray.push(data);
-        this.formUser.reset();
-        this.selectedRoles = [];
-        this.formVendedor.reset();
-      }),
-        catchError((error) => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Error al crear el usuario.',
-            timer: 3000,
-            confirmButtonColor: '#3085d6',
-          });
-          console.error('Error al crear usuario:', error);
-          return of([]);
-        })
-      // )
-      // .subscribe();
+      this.usuarioService
+        .saveUser(user)
+        .pipe(
+          tap((data) => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Usuario creado',
+              text: 'El usuario ha sido creado exitosamente.',
+              timer: 3000,
+              confirmButtonColor: '#3085d6',
+            });
+            this.usuariosArray.push(data);
+            this.formUser.reset();
+            this.selectedRoles = [];
+            this.formVendedor.reset();
+          }),
+          catchError((error) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Error al crear el usuario.',
+              timer: 3000,
+              confirmButtonColor: '#3085d6',
+            });
+            console.error('Error al crear usuario:', error);
+            return of([]);
+          })
+        )
+        .subscribe();
     } else {
       Swal.fire({
         icon: 'error',
