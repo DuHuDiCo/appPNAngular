@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, of, tap } from 'rxjs';
 import { ClienteService } from 'src/app/Services/Cliente/cliente.service';
+import { ConectorPagosService } from 'src/app/Services/Conector-pagos/conector-pagos.service';
 import { PagoClienteService } from 'src/app/Services/Pago-clientes/pago-cliente.service';
 import { SaveClient } from 'src/Interface/Client.type';
 import Swal from 'sweetalert2';
@@ -31,6 +32,7 @@ export class AplicarPagoClienteManualComponent implements OnInit {
   selectedFactura: any = null;
   cuentasDTOArray: any[] = [];
   cuotasSelected: any[] = [];
+  pagosClientesSinAplicarArray: any[] = [];
 
   // Modal
   isModalOpen = false;
@@ -40,6 +42,7 @@ export class AplicarPagoClienteManualComponent implements OnInit {
 
   constructor(private clienteService: ClienteService,
     private pagoClienteService: PagoClienteService,
+    private conectorPagosService: ConectorPagosService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router) {
@@ -53,14 +56,33 @@ export class AplicarPagoClienteManualComponent implements OnInit {
     this.route.paramMap.subscribe((params) => {
       this.idPagoCliente = Number(params.get('idPagoCliente'));
       console.log('ID Pago Cliente:', this.idPagoCliente);
+
+      if (this.pagosClientesSinAplicarArray.length > 0) {
+        this.buscarPagoYAsignarValor();
+      }
     });
 
-    const navigation = this.router.getCurrentNavigation();
-    if (navigation?.extras?.state && 'valor' in navigation.extras.state) {
-      this.valorPagoCliente = navigation.extras.state['valor'];
-      console.log('Valor del pago del cliente:', this.valorPagoCliente);
+    this.conectorPagosService.pagosClientesSinAplicar$.subscribe((pagos) => {
+      this.pagosClientesSinAplicarArray = pagos;
+      console.log('Pagos sin aplicar:', this.pagosClientesSinAplicarArray);
+
+      if (this.idPagoCliente !== null) {
+        this.buscarPagoYAsignarValor();
+      }
+    });
+  }
+
+  // Método para buscar el pago y asignar el valor
+  buscarPagoYAsignarValor() {
+    const pagoEncontrado = this.pagosClientesSinAplicarArray.find(
+      (pago) => pago.idPagoCliente === this.idPagoCliente
+    );
+
+    if (pagoEncontrado) {
+      this.valorPagoCliente = pagoEncontrado.valor;
+      console.log('Valor del pago encontrado:', this.valorPagoCliente);
     } else {
-      console.error('No se recibió el valor del pago del cliente.');
+      console.error('No se encontró el pago con el ID:', this.idPagoCliente);
     }
   }
 
@@ -237,6 +259,16 @@ export class AplicarPagoClienteManualComponent implements OnInit {
       Swal.fire({
         title: 'Error',
         text: 'Debe seleccionar al menos una cuota para guardar el abono.',
+        icon: 'error',
+        confirmButtonColor: '#3085d6',
+      });
+      return;
+    }
+
+    if (this.totalSaldo > this.valorPagoCliente!) {
+      Swal.fire({
+        title: 'Error',
+        text: 'El total de la factura no puede ser mayor al pago del cliente.',
         icon: 'error',
         confirmButtonColor: '#3085d6',
       });

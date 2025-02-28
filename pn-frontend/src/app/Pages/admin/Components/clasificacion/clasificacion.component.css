@@ -1,0 +1,62 @@
+/* Estilos para el contenedor de paginación */
+.ngx-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    /* Espacio entre elementos */
+    padding-left: 0;
+    /* Elimina el padding por defecto */
+    list-style: none;
+    /* Elimina los puntos de la lista */
+}
+
+/* Estilos para los botones "Anterior" y "Siguiente" */
+.ngx-pagination .pagination-previous a,
+.ngx-pagination .pagination-next a {
+    padding: 8px 16px;
+    background-color: #3b82f6;
+    /* Color azul de Tailwind */
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    /* Elimina el subrayado */
+}
+
+.ngx-pagination .pagination-previous a:hover,
+.ngx-pagination .pagination-next a:hover {
+    background-color: #2563eb;
+    /* Color azul más oscuro al hacer hover */
+}
+
+/* Estilos para los números de página */
+.ngx-pagination li a {
+    padding: 8px 16px;
+    background-color: #e2e8f0;
+    /* Color gris claro de Tailwind */
+    color: #4a5568;
+    /* Color gris oscuro de Tailwind */
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    /* Elimina el subrayado */
+}
+
+.ngx-pagination li a:hover {
+    background-color: #cbd5e0;
+    /* Color gris más oscuro al hacer hover */
+}
+
+/* Estilos para la página actual */
+.ngx-pagination .current {
+    padding: 8px 16px;
+    background-color: #3b82f6;
+    /* Color azul de Tailwind */
+    color: white;
+    border-radius: 8px;
+    cursor: default;
+    /* Desactiva el cursor */
+}

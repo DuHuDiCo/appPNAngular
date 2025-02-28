@@ -18,6 +18,8 @@ export class ClientesComponent implements AfterViewInit {
   formSearch!: FormGroup
 
   editCliente: boolean = false
+  itemsPerPage = 5;
+  currentPage = 1;
   searchCriteria = { cliente: '' };
 
   constructor(private clienteService: ClienteService, private formBuilder: FormBuilder, private renderer: Renderer2) {
@@ -34,13 +36,13 @@ export class ClientesComponent implements AfterViewInit {
     this.formSearch = formBuilder.group({
       "dato": ['', [Validators.required]],
     });
-   }
+  }
 
   ngAfterViewInit(): void {
     this.getClientes();
   }
 
-  getClientes(){
+  getClientes() {
     this.clienteService.getClientes().pipe(
       tap((data: any) => {
         this.clientesArray = data
@@ -52,15 +54,15 @@ export class ClientesComponent implements AfterViewInit {
     ).subscribe()
   }
 
-  createCliente(){
-    if(this.formCliente.valid){
+  createCliente() {
+    if (this.formCliente.valid) {
       var cliente: any = this.formCliente.value
-      if(cliente.enabled == null){
+      if (cliente.enabled == null) {
         cliente.enabled = false
       }
       console.log(this.formCliente.value);
       console.log(cliente);
-      
+
       this.clienteService.createCliente(cliente).pipe(
         tap((data: any) => {
           Swal.fire({
@@ -73,7 +75,7 @@ export class ClientesComponent implements AfterViewInit {
           this.clientesArray.push(data)
           this.formCliente.reset();
           console.log(data);
-       }), catchError((error: Error) => {
+        }), catchError((error: Error) => {
           Swal.fire({
             icon: 'error',
             title: 'Error',
@@ -96,10 +98,10 @@ export class ClientesComponent implements AfterViewInit {
     }
   }
 
-  updateCliente(){
-    if(this.formCliente.valid){
+  updateCliente() {
+    if (this.formCliente.valid) {
       var cliente: any = this.formCliente.value
-      
+
       this.clienteService.updateCliente(cliente.idClient, cliente).pipe(
         tap((data: any) => {
           Swal.fire({
@@ -113,7 +115,7 @@ export class ClientesComponent implements AfterViewInit {
           this.clientesArray[pos] = data;
           this.formCliente.reset();
           console.log(data);
-       }), catchError((error: Error) => {
+        }), catchError((error: Error) => {
           Swal.fire({
             icon: 'error',
             title: 'Error',
@@ -136,7 +138,7 @@ export class ClientesComponent implements AfterViewInit {
     }
   }
 
-  getClienteById(idClient: number){
+  getClienteById(idClient: number) {
     var user = this.clientesArray.find((u: SaveClient) => u.idClient === idClient);
     console.log(user);
 
@@ -166,7 +168,7 @@ export class ClientesComponent implements AfterViewInit {
             this.clientesArray = this.clientesArray.filter(
               (c: any) => c.idClient !== idClient
             );
-  
+
             Swal.fire({
               icon: "success",
               title: "Cliente eliminado",
@@ -174,8 +176,8 @@ export class ClientesComponent implements AfterViewInit {
               timer: 3000,
               confirmButtonColor: "#3085d6",
             });
-  
-            console.log(data); 
+
+            console.log(data);
           }),
           catchError((error: Error) => {
             Swal.fire({
@@ -185,17 +187,17 @@ export class ClientesComponent implements AfterViewInit {
               timer: 3000,
               confirmButtonColor: "#3085d6",
             });
-  
-            console.error(error); 
-            return of([]); 
+
+            console.error(error);
+            return of([]);
           })
         ).subscribe();
       }
     });
-  } 
+  }
 
   getBuscarCliente(dato: string) {
-    if(dato == ''){
+    if (dato == '') {
       this.getClientes();
       return;
     }
@@ -203,7 +205,7 @@ export class ClientesComponent implements AfterViewInit {
     if (this.formSearch.valid) {
       this.clienteService.buscarCliente(dato).pipe(
         tap((data: any) => {
-          this.clientesArray= data
+          this.clientesArray = data
           Swal.fire({
             icon: 'success',
             title: 'Clientes encontrados',
@@ -231,7 +233,7 @@ export class ClientesComponent implements AfterViewInit {
               text: 'Error al buscar el cliente',
               timer: 3000,
               confirmButtonColor: "#3085d6",
-            })        
+            })
             console.log(error);
             return of([])
           }
@@ -248,9 +250,8 @@ export class ClientesComponent implements AfterViewInit {
     }
   }
 
-  clearCliente(){
+  clearCliente() {
     this.editCliente = false;
     this.formCliente.reset();
   }
 }
-  

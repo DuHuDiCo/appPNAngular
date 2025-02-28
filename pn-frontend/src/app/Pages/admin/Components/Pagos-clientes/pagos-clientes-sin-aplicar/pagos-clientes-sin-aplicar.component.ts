@@ -7,6 +7,7 @@ import { SaveClient } from 'src/Interface/Client.type';
 import { ClienteService } from 'src/app/Services/Cliente/cliente.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ConectorPagosService } from 'src/app/Services/Conector-pagos/conector-pagos.service';
 
 
 @Component({
@@ -30,9 +31,12 @@ export class PagosClientesSinAplicarComponent implements OnInit {
 
   // Variables
   selectedPago: any = {};
+  itemsPerPage = 5;
+  currentPage = 1;
 
   constructor(private pagoClienteService: PagoClienteService,
     private clienteService: ClienteService,
+    private conectorPagosService: ConectorPagosService,
     private formBuilder: FormBuilder,
     private router: Router,
   ) {
@@ -46,6 +50,22 @@ export class PagosClientesSinAplicarComponent implements OnInit {
     this.getPagosClientesSinAplicar();
     this.getClientes();
   }
+
+  // Método para obtener los pagos de clientes sin aplicar
+  getPagosClientesSinAplicar() {
+    this.pagoClienteService.getPagoClienteSinAplicar().pipe(
+      tap((data: any) => {
+        this.pagosClientesSinAplicarArray = data;
+        this.conectorPagosService.setPagosClientesSinAplicar(data);
+        console.log(this.pagosClientesSinAplicarArray);
+      }),
+      catchError((error: Error) => {
+        console.error('Error al cargar datos:', error);
+        return of([]);
+      })
+    ).subscribe();
+  }
+
 
   aplicarPago(p: any): void {
     const navigationExtras = {
@@ -97,19 +117,6 @@ export class PagosClientesSinAplicarComponent implements OnInit {
         return of([])
       })
     ).subscribe()
-  }
-
-  // Método para obtener los pagos de clientes sin aplicar
-  getPagosClientesSinAplicar() {
-    this.pagoClienteService.getPagoClienteSinAplicar().pipe(
-      tap((data: any) => {
-        this.pagosClientesSinAplicarArray = data;
-      }),
-      catchError((error: Error) => {
-        console.error('Error al cargar datos:', error);
-        return of([]);
-      })
-    ).subscribe();
   }
 
   // Metodo para eliminar un pago de cliente

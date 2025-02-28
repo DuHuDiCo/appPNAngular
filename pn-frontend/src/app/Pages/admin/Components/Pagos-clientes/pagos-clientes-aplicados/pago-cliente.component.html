@@ -84,7 +84,8 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let p of pagosClienteArray" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <tr *ngFor="let p of pagosClienteArray | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }"
+                    class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                     <th scope="row"
                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
                         {{ p.numeroRecibo}}
@@ -121,6 +122,11 @@
                 </tr>
             </tbody>
         </table>
+    </div>
+
+    <div class="mt-4 flex justify-center">
+        <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="currentPage = $event">
+        </pagination-controls>
     </div>
 </div>
 

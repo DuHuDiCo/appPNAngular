@@ -66,7 +66,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 text-center" *ngFor="let u of usuariosArray">
+        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 text-center"
+          *ngFor="let u of usuariosArray | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }">
           <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
             <ng-container *ngFor="let userRole of u.userRoles">
               <div>{{ userRole.role.role }}</div>
@@ -128,6 +129,11 @@
         </tr>
       </tbody>
     </table>
+  </div>
+
+  <div class="mt-4 flex justify-center">
+    <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="currentPage = $event">
+    </pagination-controls>
   </div>
 
   <!-- Modal para Ver crear y editar usuario -->

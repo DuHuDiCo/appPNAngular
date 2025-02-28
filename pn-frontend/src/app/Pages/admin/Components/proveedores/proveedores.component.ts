@@ -21,6 +21,8 @@ export class ProveedoresComponent implements AfterViewInit {
 
   // VARIABLES
   editProveedor: boolean = false
+  itemsPerPage = 5;
+  currentPage = 1;
   searchCriteria = { proveedor: '' };
 
   constructor(private formBuilder: FormBuilder, private proveedorService: ProveedorService, private renderer: Renderer2) {
@@ -44,7 +46,7 @@ export class ProveedoresComponent implements AfterViewInit {
     this.getProveedores()
   }
 
-  getProveedores(){
+  getProveedores() {
     this.proveedorService.getProveedores().pipe(
       tap((data: any) => {
         this.proveedoresArray = data
@@ -56,11 +58,11 @@ export class ProveedoresComponent implements AfterViewInit {
     ).subscribe()
   }
 
-  createProveedor(){
-    if(this.formProveedor.valid){
+  createProveedor() {
+    if (this.formProveedor.valid) {
       var proveedor: SaveProveedor = this.formProveedor.value
       console.log(proveedor);
-      
+
       this.proveedorService.saveProveedor(proveedor).pipe(
         tap((data: any) => {
           Swal.fire({
@@ -73,7 +75,7 @@ export class ProveedoresComponent implements AfterViewInit {
           this.proveedoresArray.push(data)
           this.formProveedor.reset();
           console.log(data);
-       }), catchError((error: Error) => {
+        }), catchError((error: Error) => {
           Swal.fire({
             icon: 'error',
             title: 'Error',
@@ -96,12 +98,12 @@ export class ProveedoresComponent implements AfterViewInit {
     }
   }
 
-  updateProveedor(){
-    if(this.formProveedor.valid){
+  updateProveedor() {
+    if (this.formProveedor.valid) {
       console.log(this.formProveedor.value);
-      
+
       var Proveedor: SaveProveedor = this.formProveedor.value;
-      
+
       this.proveedorService.editProveedor(Proveedor.idProveedor, Proveedor).pipe(
         tap((data: any) => {
           Swal.fire({
@@ -115,7 +117,7 @@ export class ProveedoresComponent implements AfterViewInit {
           this.proveedoresArray[pos] = data;
           this.formProveedor.reset();
           console.log(data);
-       }), catchError((error: Error) => {
+        }), catchError((error: Error) => {
           Swal.fire({
             icon: 'error',
             title: 'Error',
@@ -138,7 +140,7 @@ export class ProveedoresComponent implements AfterViewInit {
     }
   }
 
-  getProveedorById(idProveedor: number){
+  getProveedorById(idProveedor: number) {
     var proveedor = this.proveedoresArray.find((p: any) => p.idProveedor === idProveedor)
     console.log(proveedor);
 
@@ -151,13 +153,13 @@ export class ProveedoresComponent implements AfterViewInit {
     }
   }
 
-  getBuscarProveedor(dato: string){
-    if(dato == ''){
+  getBuscarProveedor(dato: string) {
+    if (dato == '') {
       this.getProveedores();
       return;
     }
 
-    if(this.formSearch.valid){
+    if (this.formSearch.valid) {
       this.proveedorService.buscarProveedor(dato).pipe(
         tap((data: any) => {
           this.proveedoresArray = data
@@ -188,7 +190,7 @@ export class ProveedoresComponent implements AfterViewInit {
               text: 'Error al buscar el proveedor',
               timer: 3000,
               confirmButtonColor: "#3085d6",
-            })        
+            })
             console.log(error);
             return of([])
           }
@@ -204,7 +206,7 @@ export class ProveedoresComponent implements AfterViewInit {
       })
     }
   }
-  
+
   deleteProveedor(idProveedor: number) {
     Swal.fire({
       title: "¿Estas seguro?",
@@ -222,7 +224,7 @@ export class ProveedoresComponent implements AfterViewInit {
             this.proveedoresArray = this.proveedoresArray.filter(
               (p: any) => p.idProveedor !== idProveedor
             );
-  
+
             Swal.fire({
               icon: "success",
               title: "Proveedor eliminado",
@@ -230,8 +232,8 @@ export class ProveedoresComponent implements AfterViewInit {
               timer: 3000,
               confirmButtonColor: "#3085d6",
             });
-  
-            console.log(data); 
+
+            console.log(data);
           }),
           catchError((error: Error) => {
             Swal.fire({
@@ -241,16 +243,16 @@ export class ProveedoresComponent implements AfterViewInit {
               timer: 3000,
               confirmButtonColor: "#3085d6",
             });
-  
-            console.error(error); 
-            return of([]); 
+
+            console.error(error);
+            return of([]);
           })
         ).subscribe();
       }
     });
   }
-  
-  clearProveedor(){
+
+  clearProveedor() {
     this.editProveedor = false;
     this.formProveedor.reset();
   }

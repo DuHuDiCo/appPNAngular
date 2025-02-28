@@ -55,13 +55,14 @@
                         placeholder="Valor a pagar" (input)="onTotalPagoChange($event)" />
                 </div>
                 <button type="submit" (click)="createAbono()" [disabled]="isButtonDisabled()"
-                    [ngClass]="{'opacity-50 cursor-not-allowed': isButtonDisabled()}"
+                    [ngClass]="{'opacity-50 cursor-not-allowed': isButtonDisabled()}" title="Crear aplicación de pago"
                     class="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg border border-primary hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                        <path
-                            d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm0 15a1.5 1.5 0 1 0 1.5-1.5A1.5 1.5 0 0 0 12 17Zm1-4h-2V7h2Z" />
+                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <span class="sr-only">Guardar</span>
+                    <span class="sr-only">Crear abono</span>
                 </button>
 
             </div>

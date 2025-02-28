@@ -11,6 +11,8 @@ import Swal from 'sweetalert2';
 })
 export class ClasificacionComponent implements AfterViewInit {
   clasificacionArray: any[] = []
+  itemsPerPage = 5;
+  currentPage = 1;
   formClasificacion!: FormGroup
   formSearch!: FormGroup
 

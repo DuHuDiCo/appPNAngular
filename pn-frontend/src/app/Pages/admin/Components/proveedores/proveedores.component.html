@@ -87,7 +87,8 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let p of proveedoresArray" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <tr *ngFor="let p of proveedoresArray | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }"
+                    class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                     <th scope="row"
                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
                         {{ p.proveedor }}
@@ -138,6 +139,13 @@
             </tbody>
         </table>
     </div>
+
+    <div class="mt-4 flex justify-center">
+        <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="currentPage = $event">
+        </pagination-controls>
+    </div>
+
+
 
     <div id="editProvModal" tabindex="-1" aria-hidden="true"
         class="fixed top-0 left-0 right-0 z-50 items-center justify-center hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full bg-gray-800 bg-opacity-50">

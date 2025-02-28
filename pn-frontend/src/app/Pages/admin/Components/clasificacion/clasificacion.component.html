@@ -7,7 +7,7 @@
     <!-- Botón Agregar alineado a la izquierda -->
     <div class="flex justify-start mb-4 ml-56">
         <button type="button" data-modal-target="addClasModal" data-modal-toggle="addClasModal"
-            class="flex items-center px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            class="flex items-center px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
             <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -28,8 +28,9 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let c of clasificacionArray"
-                    class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-blue-100 dark:hover:bg-blue-600 transition-colors duration-300">
+                <!-- Iterar sobre los elementos paginados -->
+                <tr *ngFor="let c of clasificacionArray | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }"
+                    class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                     <th scope="row"
                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
                         {{ c.clasificacionProducto }}
@@ -47,8 +48,12 @@
                 </tr>
             </tbody>
         </table>
-    </div>
 
+        <div class="mt-4 flex justify-center">
+            <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="currentPage = $event">
+            </pagination-controls>
+        </div>
+    </div>
 
     <div id="addClasModal" tabindex="-1" aria-hidden="true"
         class="fixed top-0 left-0 right-0 z-50 items-center justify-center hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full bg-gray-800 bg-opacity-50">

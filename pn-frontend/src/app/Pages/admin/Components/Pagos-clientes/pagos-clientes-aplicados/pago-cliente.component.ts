@@ -21,6 +21,8 @@ export class PagoClienteComponent implements OnInit {
   comprobantePreview: string | null = null;
   pagosClienteArray: any[] = [];
   clientesArray: SaveClient[] = [];
+  itemsPerPage = 5;
+  currentPage = 1;
   isModalOpen: boolean = false;
   isPagoAplicado: boolean = false;
   selectedPago: any = {};

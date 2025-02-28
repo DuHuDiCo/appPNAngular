@@ -12,6 +12,7 @@ import { ClientesComponent } from '../../Components/clientes/clientes.component'
 import { ClasificacionComponent } from '../../Components/clasificacion/clasificacion.component';
 import { BuscarLiquidacionComponent } from '../../Components/buscar-liquidacion/buscar-liquidacion.component';
 import { PagoClienteComponent } from '../../Components/Pagos-clientes/pagos-clientes-aplicados/pago-cliente.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,8 @@ import { PagoClienteComponent } from '../../Components/Pagos-clientes/pagos-clie
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
+    NgxPaginationModule,
+
   ],
   exports: [ModuloAdminComponent],
 })

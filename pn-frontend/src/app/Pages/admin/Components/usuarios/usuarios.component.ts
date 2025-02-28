@@ -33,6 +33,8 @@ export class UsuariosComponent implements AfterViewInit {
   vendedorRoleId: number | null = null;
   selectedUser: Usuario | null = null;
   editUser: boolean = false;
+  itemsPerPage = 5;
+  currentPage = 1;
   searchCriteria = { name: '', lastname: '' };
 
   constructor(
