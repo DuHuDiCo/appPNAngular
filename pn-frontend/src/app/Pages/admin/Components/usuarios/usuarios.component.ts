@@ -54,7 +54,7 @@ export class UsuariosComponent implements AfterViewInit {
     });
 
     this.formVendedor = formBuilder.group({
-      porcentaje: ['', [Validators.required, Validators.pattern('')]],
+      porcentajeLiquidacion: ['', [Validators.required, Validators.pattern('')]],
     });
 
     this.formSearch = formBuilder.group({
@@ -222,11 +222,11 @@ export class UsuariosComponent implements AfterViewInit {
   // Metodo para agregar un rol con permisos
   addRoleWithPermissions() {
     if (this.formUser.get('isVendedor')?.value === true) {
-      if (!this.formVendedor.get('porcentaje')?.valid) {
+      if (!this.formVendedor.get('porcentajeLiquidacion')?.valid) {
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: 'Por favor, agregue un porcentaje válido de liquidación.',
+          text: 'Por favor, agregue un porcentaje de liquidación válido.',
           timer: 3000,
           confirmButtonColor: '#3085d6',
         });
@@ -294,7 +294,7 @@ export class UsuariosComponent implements AfterViewInit {
       }
 
       if (this.formUser.get('isVendedor')?.value === true) {
-        user.porcentajeLiquidacion = Number(this.formVendedor.get('porcentaje')?.value);
+        user.porcentajeLiquidacion = Number(this.formVendedor.get('porcentajeLiquidacion')?.value);
       }
 
       console.log('Usuario enviado al backend:', user);
@@ -373,12 +373,20 @@ export class UsuariosComponent implements AfterViewInit {
         isVendedor: isVendedor,
       });
 
+      if (isVendedor) {
+        this.formVendedor.patchValue({
+          porcentajeLiquidacion: user.porcentajeLiquidacion ?? '',
+        });
+      }
 
       const button = document.getElementById('modalClick');
       if (button) {
         this.editUser = true;
         this.renderer.selectRootElement(button).click();
       }
+
+      console.log('Usuario encontrado:', user);
+      console.log('Porcentaje Liquidación:', user.porcentajeLiquidacion);
     } else {
       Swal.fire({
         icon: 'error',
@@ -419,7 +427,7 @@ export class UsuariosComponent implements AfterViewInit {
       }
 
       if (this.formUser.get('isVendedor')?.value === true) {
-        user.porcentajeLiquidacion = Number(this.formVendedor.get('porcentaje')?.value);
+        user.porcentajeLiquidacion = Number(this.formVendedor.get('porcentajeLiquidacion')?.value);
       }
 
       console.log("Roles seleccionados:", this.selectedRoles);
@@ -591,5 +599,4 @@ export class UsuariosComponent implements AfterViewInit {
     this.selectedRoleId = null;
     this.selectedUser = null;
   }
-
 }
