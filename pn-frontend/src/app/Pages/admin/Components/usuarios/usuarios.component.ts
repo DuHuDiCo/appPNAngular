@@ -411,6 +411,17 @@ export class UsuariosComponent implements AfterViewInit {
       return;
     }
 
+    if (this.formUser.get('password')?.value.length < 6) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'La contraseña debe tener al menos 6 caracteres.',
+        timer: 3000,
+        confirmButtonColor: '#3085d6',
+      });
+      return;
+    }
+
     const isVendedorSelected = this.selectedRoles.some(role => role.role === 2);
 
     if (isVendedorSelected) {
