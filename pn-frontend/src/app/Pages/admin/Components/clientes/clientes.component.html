@@ -61,6 +61,9 @@
         <table class="w-full text-left text-sm rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-white uppercase bg-primary dark:bg-gray-700">
                 <tr class="text-center">
+                    <!-- <th scope="col" class="px-6 py-3">
+                        Alias
+                    </th> -->
                     <th scope="col" class="px-6 py-3">
                         Nombre completo
                     </th>
@@ -81,6 +84,9 @@
             <tbody>
                 <tr *ngFor="let c of clientesArray | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }"
                     class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <!-- <th class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                        {{ c.alias }}
+                    </th> -->
                     <th scope="row"
                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
                         {{ c.name }} {{ c.lastname }}
@@ -159,6 +165,13 @@
                 <!-- Modal body -->
                 <div class="px-6 py-4 space-y-4">
                     <div class="grid grid-cols-6 gap-6">
+                        <div class="col-span-6 sm:col-span-3">
+                            <label for="alias"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Alias</label>
+                            <input type="text" formControlName="alias"
+                                class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500"
+                                placeholder="Escribe el alias" required>
+                        </div>
                         <div class="col-span-6 sm:col-span-3">
                             <label for="first-name"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Nombre</label>

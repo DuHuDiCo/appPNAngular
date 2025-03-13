@@ -26,6 +26,7 @@ export class ClientesComponent implements AfterViewInit {
 
     this.formCliente = formBuilder.group({
       "idClient": [''],
+      "alias": ['', [Validators.required]],
       "name": ['', [Validators.required]],
       "lastname": ['', [Validators.required]],
       "email": ['', [Validators.required, Validators.email]],
